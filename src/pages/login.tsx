@@ -4,6 +4,20 @@ import { Button, Card, message, Form, Input } from 'antd';
 import { config } from '../config';
 
 const Login: React.FC = () => {
+  const [messageApi, contextHolder] = message.useMessage();
+  const success = (message: string) => {
+    messageApi.open({
+      type: 'success',
+      content: message,
+    });
+  };
+
+  const error = (message: string) => {
+    messageApi.open({
+      type: 'error',
+      content: message,
+    });
+  };
   const onFinish = async (values: any) => {
     console.log('Received values of form: ', values);
 
@@ -28,19 +42,17 @@ const Login: React.FC = () => {
         localStorage.setItem('rolename', data.rolename);
         localStorage.setItem('name', data.name);
         localStorage.setItem('isLogin', 'true');
-        message.success('Login successful');
+        success('Login successful');
         window.location.href = '/';
         // Redirect or perform any other action upon successful login
       } else {
         // Handle unsuccessful login (e.g., incorrect credentials)
-        message.error('Login failed. Please check your credentials.');
+        error('Login failed. Please check your credentials.');
       }
-    } catch (error) {
-      console.error('Error logging in:', error);
+    } catch (err) {
+      error('An error occurred while logging in. Please try again later.');
+      console.error('Error logging in:', err);
       // Handle other errors that may occur during login
-      message.error(
-        'An error occurred while logging in. Please try again later.'
-      );
     }
   };
 
@@ -53,6 +65,7 @@ const Login: React.FC = () => {
         height: '100vh',
       }}
     >
+      {contextHolder}
       <Card
         title={
           <span

@@ -17,7 +17,7 @@ import {
   Card,
 } from 'antd';
 import type { TableProps, DatePickerProps } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { config } from '../config';
@@ -64,6 +64,7 @@ const normFile = (e: any) => {
 
 const FormArea: React.FC = () => {
   const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
   const [data, setData] = React.useState<DataType[]>([]);
   const [dataEdit, setDataEdit] = React.useState<DataType[]>([]);
   const [openModalAdd, setOpenModalAdd] = React.useState(false);
@@ -113,8 +114,22 @@ const FormArea: React.FC = () => {
     },
   ]);
 
+  const success = (message: string) => {
+    messageApi.open({
+      type: 'success',
+      content: message,
+    });
+  };
+
+  const error = (message: string) => {
+    messageApi.open({
+      type: 'error',
+      content: message,
+    });
+  };
+
   const beforeUpload = (file: any) => {
-    return true; // Allow upload for all files
+    return false; // Allow upload for all files
   };
 
   useEffect(() => {
@@ -161,7 +176,7 @@ const FormArea: React.FC = () => {
             },
             body: formData,
           })
-            .then((response) => {
+            .then(async (response) => {
               if (response.ok) {
                 return response.json();
               }
@@ -172,17 +187,17 @@ const FormArea: React.FC = () => {
                 localStorage.removeItem('token');
                 window.location.href = '/login';
               }
-              throw new Error('Network response was not ok.');
+              const data = await response.json();
+              throw new Error(data.error);
             })
             .then((data) => {
               console.log('Form data edited successfully:', data);
-              message.success('Form data edited successfully');
+              success('Form data edited successfully');
               fetchData(cabang, bangunan, year, month);
               setOpenModalAdd(false);
             })
-            .catch((error) => {
-              message.error('Error edit form data');
-              console.error('Error edit form data:', error);
+            .catch((err) => {
+              error(err.toString());
             });
         } else {
           fetch(`${config.apiUrl}/proteksi-kebakaran-area/save`, {
@@ -194,7 +209,7 @@ const FormArea: React.FC = () => {
             },
             body: formData,
           })
-            .then((response) => {
+            .then(async (response) => {
               if (response.ok) {
                 return response.json();
               }
@@ -205,17 +220,17 @@ const FormArea: React.FC = () => {
                 localStorage.removeItem('token');
                 window.location.href = '/login';
               }
-              throw new Error('Network response was not ok.');
+              const data = await response.json();
+              throw new Error(data.error);
             })
             .then((data) => {
               console.log('Form data posted successfully:', data);
-              message.success('Form data posted successfully');
+              success('Form data posted successfully');
               fetchData(cabang, bangunan, year, month);
               setOpenModalAdd(false);
             })
-            .catch((error) => {
-              message.error('Error posting form data');
-              console.error('Error posting form data:', error);
+            .catch((err) => {
+              error(err.toString());
             });
         }
       })
@@ -298,8 +313,8 @@ const FormArea: React.FC = () => {
         console.log('transformedData', transformedData);
         setData(transformedData);
       })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
+      .catch((err) => {
+        console.error('Error fetching data:', err);
       });
   };
 
@@ -333,8 +348,8 @@ const FormArea: React.FC = () => {
         a.click();
         window.URL.revokeObjectURL(url);
       })
-      .catch((error) => {
-        console.error('Error downloading file:', error);
+      .catch((err) => {
+        console.error('Error downloading file:', err);
       });
   }
 
@@ -381,8 +396,8 @@ const FormArea: React.FC = () => {
         });
         setOptionsCabang(result);
       })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
+      .catch((err) => {
+        console.error('Error fetching data:', err);
       });
   };
   const handleCancelAdd = () => {
@@ -421,6 +436,7 @@ const FormArea: React.FC = () => {
 
   return (
     <div>
+      {contextHolder}
       <div>
         <Button
           type="primary"
@@ -549,14 +565,8 @@ const FormArea: React.FC = () => {
                 name="layout_denah_area"
                 getValueFromEvent={normFile}
               >
-                <Upload listType="picture-card" beforeUpload={beforeUpload}>
-                  <button
-                    style={{ border: 0, background: 'none' }}
-                    type="button"
-                  >
-                    <PlusOutlined />
-                    <div style={{ marginTop: 8 }}>Upload</div>
-                  </button>
+                <Upload beforeUpload={beforeUpload}>
+                  <Button icon={<UploadOutlined />}>Click to Upload</Button>
                 </Upload>
               </Form.Item>
             </Col>

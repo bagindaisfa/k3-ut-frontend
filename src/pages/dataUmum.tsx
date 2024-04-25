@@ -41,6 +41,7 @@ const normFile = (e: any) => {
 
 const DataUmum: React.FC = () => {
   const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
   const [id, setId] = React.useState<string>('');
   const [data, setData] = React.useState<DataType[]>([]);
   const [dataEdit, setDataEdit] = React.useState<DataType[]>([]);
@@ -280,7 +281,7 @@ const DataUmum: React.FC = () => {
             },
             body: formData,
           })
-            .then((response) => {
+            .then(async (response) => {
               if (response.ok) {
                 return response.json();
               }
@@ -291,11 +292,12 @@ const DataUmum: React.FC = () => {
                 localStorage.removeItem('token');
                 window.location.href = '/login';
               }
-              throw new Error('Network response was not ok.');
+              const data = await response.json();
+              throw new Error(data.error);
             })
             .then((data) => {
               console.log('Form data edited successfully:', data);
-              message.success('Form data edited successfully');
+              success('Form data edited successfully');
               getDataCabang();
               getDataSite();
               getDataPlant();
@@ -303,7 +305,7 @@ const DataUmum: React.FC = () => {
               setOpenModalAdd(false);
             })
             .catch((error) => {
-              message.error('Error edit form data');
+              error(error.toString());
               console.error('Error edit form data:', error);
             });
         } else {
@@ -316,7 +318,7 @@ const DataUmum: React.FC = () => {
             },
             body: formData,
           })
-            .then((response) => {
+            .then(async (response) => {
               if (response.ok) {
                 return response.json();
               }
@@ -327,11 +329,12 @@ const DataUmum: React.FC = () => {
                 localStorage.removeItem('token');
                 window.location.href = '/login';
               }
-              throw new Error('Network response was not ok.');
+              const data = await response.json();
+              throw new Error(data.error);
             })
             .then((data) => {
               console.log('Form data posted successfully:', data);
-              message.success('Form data posted successfully');
+              success('Form data posted successfully');
               getDataCabang();
               getDataSite();
               getDataPlant();
@@ -339,7 +342,7 @@ const DataUmum: React.FC = () => {
               setOpenModalAdd(false);
             })
             .catch((error) => {
-              message.error('Error posting form data');
+              error(error.toString());
               console.error('Error posting form data:', error);
             });
         }
@@ -644,7 +647,7 @@ const DataUmum: React.FC = () => {
   };
 
   const beforeUpload = (file: any) => {
-    return true; // Allow upload for all files
+    return false; // Allow upload for all files
   };
 
   function setDataForEdit() {
@@ -688,8 +691,23 @@ const DataUmum: React.FC = () => {
       });
   }
 
+  const success = (message: string) => {
+    messageApi.open({
+      type: 'success',
+      content: message,
+    });
+  };
+
+  const error = (message: string) => {
+    messageApi.open({
+      type: 'error',
+      content: message,
+    });
+  };
+
   return (
     <div>
+      {contextHolder}
       <div>
         <Button
           type="primary"

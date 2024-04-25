@@ -38,6 +38,7 @@ interface DataType {
 
 const MonitoringPerizinan: React.FC = () => {
   const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
   const [data, setData] = React.useState<DataType[]>([]);
   const [openModalAdd, setOpenModalAdd] = React.useState(false);
   const [month, setMonth] = React.useState(new Date().getMonth() + 1);
@@ -176,7 +177,7 @@ const MonitoringPerizinan: React.FC = () => {
             },
             body: JSON.stringify(requestBody),
           })
-            .then((response) => {
+            .then(async (response) => {
               if (response.ok) {
                 return response.json();
               }
@@ -187,17 +188,18 @@ const MonitoringPerizinan: React.FC = () => {
                 localStorage.removeItem('token');
                 window.location.href = '/login';
               }
-              throw new Error('Network response was not ok.');
+              const data = await response.json();
+              throw new Error(data.error);
             })
             .then((data) => {
               console.log('Form data posted successfully:', data);
-              message.success('Form data posted successfully');
+              success('Form data posted successfully');
               fetchData(year, month);
               setOpenModalAdd(false);
             })
-            .catch((error) => {
-              message.error('Error posting form data');
-              console.error('Error posting form data:', error);
+            .catch((err) => {
+              error(err.toString());
+              console.error('Error posting form data:', err);
             });
         } else {
           fetch(`${config.apiUrl}/legal-spi/save`, {
@@ -210,7 +212,7 @@ const MonitoringPerizinan: React.FC = () => {
             },
             body: JSON.stringify(requestBody),
           })
-            .then((response) => {
+            .then(async (response) => {
               if (response.ok) {
                 return response.json();
               }
@@ -221,17 +223,18 @@ const MonitoringPerizinan: React.FC = () => {
                 localStorage.removeItem('token');
                 window.location.href = '/login';
               }
-              throw new Error('Network response was not ok.');
+              const data = await response.json();
+              throw new Error(data.error);
             })
             .then((data) => {
               console.log('Form data posted successfully:', data);
-              message.success('Form data posted successfully');
+              success('Form data posted successfully');
               fetchData(year, month);
               setOpenModalAdd(false);
             })
-            .catch((error) => {
-              message.error('Error posting form data');
-              console.error('Error posting form data:', error);
+            .catch((err) => {
+              error(err.toString());
+              console.error('Error posting form data:', err);
             });
         }
       })
@@ -262,7 +265,7 @@ const MonitoringPerizinan: React.FC = () => {
         },
       }
     )
-      .then((response) => {
+      .then(async (response) => {
         if (response.ok) {
           return response.json();
         }
@@ -274,13 +277,15 @@ const MonitoringPerizinan: React.FC = () => {
           localStorage.removeItem('token');
           window.location.href = '/login';
         }
-        throw new Error('Network response was not ok.');
+        const data = await response.json();
+        throw new Error(data.error);
       })
       .then((data) => {
         setData(data.data);
       })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
+      .catch((err) => {
+        error(err.toString());
+        console.error('Error fetching data:', err);
       });
   };
 
@@ -301,7 +306,7 @@ const MonitoringPerizinan: React.FC = () => {
         'client-secret': config.clientSecret,
       },
     })
-      .then((response) => {
+      .then(async (response) => {
         if (response.ok) {
           return response.json();
         }
@@ -312,15 +317,16 @@ const MonitoringPerizinan: React.FC = () => {
           localStorage.removeItem('token');
           window.location.href = '/login';
         }
-        throw new Error('Network response was not ok.');
+        const data = await response.json();
+        throw new Error(data.error);
       })
       .then((data) => {
-        message.success('Deleted successfully');
+        success('Deleted successfully');
         fetchData(year, month);
       })
-      .catch((error) => {
-        message.error('Error posting form data');
-        console.error('Error posting form data:', error);
+      .catch((err) => {
+        error(err.toString());
+        console.error('Error posting form data:', err);
       });
   };
 
@@ -350,8 +356,23 @@ const MonitoringPerizinan: React.FC = () => {
     fetchData(year, new Date(dateString as string).getMonth() + 1);
   };
 
+  const success = (message: string) => {
+    messageApi.open({
+      type: 'success',
+      content: message,
+    });
+  };
+
+  const error = (message: string) => {
+    messageApi.open({
+      type: 'error',
+      content: message,
+    });
+  };
+
   return (
     <div>
+      {contextHolder}
       <div>
         <Button
           type="primary"
