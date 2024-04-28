@@ -3,9 +3,10 @@ import {
   DashboardOutlined,
   FormOutlined,
   FileDoneOutlined,
+  LogoutOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Layout, Menu, theme, Image } from 'antd';
+import { Layout, Menu, theme, Image, Tooltip, Button } from 'antd';
 import UT from './assets/UT.png';
 import FormEval from './pages/formEval';
 import FormArea from './pages/formArea';
@@ -89,31 +90,45 @@ const App: React.FC = () => {
       </Sider>
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer }}>
-          <span
-            style={{
-              textAlign: 'center',
-              color: 'black',
-              height: 64,
-              paddingInline: 48,
-              lineHeight: '64px',
-              fontSize: 20,
-              fontWeight: 'bold',
-            }}
-          >
-            {current === 'dashboard' ? (
-              <>DASHBOARD</>
-            ) : current === 'monitoring-perizinan' ? (
-              <>MONITORING PERIZINAN</>
-            ) : current === 'data-umum' ? (
-              <>DATA UMUM</>
-            ) : current === 'form-area' ? (
-              <>FORM AREA</>
-            ) : current === 'form-eval-proteksi-kebakaran' ? (
-              <>FORM EVAL PROTEKSI KEBAKARAN</>
-            ) : (
-              <></>
-            )}
-          </span>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span
+              style={{
+                textAlign: 'center',
+                color: 'black',
+                height: 64,
+                paddingInline: 48,
+                lineHeight: '64px',
+                fontSize: 20,
+                fontWeight: 'bold',
+              }}
+            >
+              {current === 'dashboard' ? (
+                <>DASHBOARD</>
+              ) : current === 'monitoring-perizinan' ? (
+                <>MONITORING PERIZINAN</>
+              ) : current === 'data-umum' ? (
+                <>DATA UMUM</>
+              ) : current === 'form-area' ? (
+                <>FORM AREA</>
+              ) : current === 'form-eval-proteksi-kebakaran' ? (
+                <>FORM EVAL PROTEKSI KEBAKARAN</>
+              ) : (
+                <></>
+              )}
+            </span>
+            <Tooltip title="Log Out">
+              <LogoutOutlined
+                style={{ fontSize: 20, marginRight: 48, cursor: 'pointer' }}
+                onClick={() => {
+                  localStorage.removeItem('isLogin');
+                  localStorage.removeItem('token');
+                  localStorage.removeItem('rolename');
+                  localStorage.removeItem('name');
+                  window.location.href = '/login';
+                }}
+              />
+            </Tooltip>
+          </div>
         </Header>
         <Content style={{ margin: '24px 16px 0', width: '100%' }}>
           <div
