@@ -154,12 +154,6 @@ const MonitoringPerizinan: React.FC = () => {
       .validateFields()
       .then((values) => {
         // Format the dead_line date field
-        values.pelaksanaan_pemeriksaan = dayjs(
-          values.pelaksanaan_pemeriksaan
-        ).format(dateFormat);
-        values.batas_waktu_perizinan = dayjs(
-          values.batas_waktu_perizinan
-        ).format(dateFormat);
         const requestBody = {
           ...values,
           account_name: localStorage.getItem('name'),
@@ -243,6 +237,15 @@ const MonitoringPerizinan: React.FC = () => {
       });
   };
 
+  const getRemainingDays = (endDateStr: string) => {
+    const endDate = new Date(endDateStr);
+    const today = new Date();
+    const differenceInTime = endDate.getTime() - today.getTime();
+    const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
+    console.log('differenceInDays:', differenceInDays);
+    return isNaN(differenceInDays) ? 0 : differenceInDays;
+  };
+
   const fetchData = (year: number, month: number) => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -281,6 +284,13 @@ const MonitoringPerizinan: React.FC = () => {
         throw new Error(data.error);
       })
       .then((data) => {
+        data.data.forEach((item: any) => {
+          const remainingDays = getRemainingDays(item.batas_waktu_perizinan);
+          item.countdown = `${remainingDays} Hari`;
+          item.status_perizinan =
+            remainingDays <= 60 ? 'Tidak Berlaku' : 'Berlaku';
+        });
+
         setData(data.data);
       })
       .catch((err) => {
