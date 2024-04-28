@@ -116,7 +116,6 @@ const FormEval: React.FC = () => {
       .validateFields()
       .then((values) => {
         // Format the dead_line date field
-        values.dead_line = dayjs(values.dead_line).format(dateFormat);
         const requestBody = {
           ...values,
           account_name: localStorage.getItem('name'),
