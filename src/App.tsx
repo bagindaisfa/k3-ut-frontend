@@ -77,7 +77,7 @@ const App: React.FC = () => {
         width={265}
       >
         <div className="demo-logo-vertical">
-          <Image src={UT} preview={false} />
+          <Image src={''} preview={false} />
         </div>
         <Menu
           theme="light"

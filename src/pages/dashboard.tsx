@@ -1,9 +1,20 @@
 import React, { useEffect } from 'react';
-import { Card, Col, Row, Select, DatePicker, Spin, Tooltip } from 'antd';
+import {
+  Card,
+  Col,
+  Row,
+  Select,
+  DatePicker,
+  Spin,
+  Tooltip,
+  Typography,
+} from 'antd';
 import type { TableProps, DatePickerProps } from 'antd';
 import { config } from '../config';
 import { Column } from '@ant-design/plots';
 import dayjs from 'dayjs';
+
+const { Text } = Typography;
 
 interface FieldSums {
   [key: string]: number;
@@ -1587,13 +1598,17 @@ const Dashboard: React.FC = () => {
       />
       <Row gutter={24} style={{ margin: 10 }}>
         <Col span={8}>
-          <p style={{ textAlign: 'left' }}>Nama BM/SM: {namaBMSM}</p>
+          <p style={{ textAlign: 'left', fontWeight: 700 }}>
+            Nama BM/SM: {namaBMSM}
+          </p>
         </Col>
         <Col span={8}>
-          <p style={{ textAlign: 'left' }}>Nama ADH: {namaADH}</p>
+          <p style={{ textAlign: 'left', fontWeight: 700 }}>
+            Nama ADH: {namaADH}
+          </p>
         </Col>
         <Col span={8}>
-          <p style={{ textAlign: 'left' }}>
+          <p style={{ textAlign: 'left', fontWeight: 700 }}>
             Nama ESR Officer/Leader: {namaESROfficerLeader}
           </p>
         </Col>
@@ -1608,61 +1623,144 @@ const Dashboard: React.FC = () => {
                 rowGap: '5px',
               }}
             >
-              <p style={{ textAlign: 'left' }}>Luas Area</p>
-              <p style={{ textAlign: 'left' }}>: {luasArea}</p>
+              <p style={{ textAlign: 'left', fontWeight: 700 }}>Luas Area</p>
+              <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                : {luasArea} M
+                <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
+                  ²
+                </Text>
+              </p>
 
               {bangunan === 'office' && (
                 <>
-                  <p style={{ textAlign: 'left' }}>Luas Office</p>
-                  <p style={{ textAlign: 'left' }}>: {luasAreaBangunan}</p>
-                  <p style={{ textAlign: 'left' }}>Status kepemilikan</p>
-                  <p style={{ textAlign: 'left' }}>: {kepemilikanBangunan}</p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    Luas Office
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    : {luasAreaBangunan} M
+                    <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
+                      ²
+                    </Text>
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    Status kepemilikan
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    : {kepemilikanBangunan}
+                  </p>
                 </>
               )}
               {bangunan === 'workshop' && (
                 <>
-                  <p style={{ textAlign: 'left' }}>Luas Workshop</p>
-                  <p style={{ textAlign: 'left' }}>: {luasAreaBangunan}</p>
-                  <p style={{ textAlign: 'left' }}>Status kepemilikan</p>
-                  <p style={{ textAlign: 'left' }}>: {kepemilikanBangunan}</p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    Luas Workshop
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    : {luasAreaBangunan} M
+                    <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
+                      ²
+                    </Text>
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    Status kepemilikan
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    : {kepemilikanBangunan}
+                  </p>
                 </>
               )}
 
               {bangunan === 'warehouse' && (
                 <>
-                  <p style={{ textAlign: 'left' }}>Luas Warehouse</p>
-                  <p style={{ textAlign: 'left' }}>: {luasAreaBangunan}</p>
-                  <p style={{ textAlign: 'left' }}>Status kepemilikan</p>
-                  <p style={{ textAlign: 'left' }}>: {kepemilikanBangunan}</p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    Luas Warehouse
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    : {luasAreaBangunan} M
+                    <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
+                      ²
+                    </Text>
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    Status kepemilikan
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    : {kepemilikanBangunan}
+                  </p>
                 </>
               )}
               {bangunan === 'mess' && (
                 <>
-                  <p style={{ textAlign: 'left' }}>Luas Mess</p>
-                  <p style={{ textAlign: 'left' }}>: {luasAreaBangunan}</p>
-                  <p style={{ textAlign: 'left' }}>Status kepemilikan</p>
-                  <p style={{ textAlign: 'left' }}>: {kepemilikanBangunan}</p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    Luas Mess
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    : {luasAreaBangunan} M
+                    <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
+                      ²
+                    </Text>
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    Status kepemilikan
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    : {kepemilikanBangunan}
+                  </p>
                 </>
               )}
               {bangunan === 'all' && (
                 <>
-                  <p style={{ textAlign: 'left' }}>Luas Office</p>
-                  <p style={{ textAlign: 'left' }}>: {luasOffice}</p>
-                  <p style={{ textAlign: 'left' }}>Luas Workshop</p>
-                  <p style={{ textAlign: 'left' }}>: {luasWorkshop}</p>
-                  <p style={{ textAlign: 'left' }}>Luas Warehouse</p>
-                  <p style={{ textAlign: 'left' }}>: {luasWarehouse}</p>
-                  <p style={{ textAlign: 'left' }}>Luas Mess</p>
-                  <p style={{ textAlign: 'left' }}>: {luasMess}</p>
-                  <p style={{ textAlign: 'left' }}>Status kepemilikan Tanah</p>
-                  <p style={{ textAlign: 'left' }}>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    Luas Office
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    : {luasOffice} M
+                    <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
+                      ²
+                    </Text>
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    Luas Workshop
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    : {luasWorkshop} M
+                    <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
+                      ²
+                    </Text>
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    Luas Warehouse
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    : {luasWarehouse} M
+                    <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
+                      ²
+                    </Text>
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    Luas Mess
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    : {luasMess} M
+                    <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
+                      ²
+                    </Text>
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    Status kepemilikan Tanah
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
                     : {statusKepemilikanTanah}
                   </p>
                 </>
               )}
 
-              <p style={{ textAlign: 'left' }}>Jumlah Man Power</p>
-              <p style={{ textAlign: 'left' }}>: {jmlManPower}</p>
+              <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                Jumlah Man Power
+              </p>
+              <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                : {jmlManPower}
+              </p>
             </div>
           </Card>
         </Col>
@@ -1680,7 +1778,7 @@ const Dashboard: React.FC = () => {
       <Row gutter={24} style={{ margin: 10 }}>
         <Col span={6}>
           <Card style={{ width: '100%', height: '100%' }}>
-            <h3>Pompa Jockey</h3>
+            <h2>Pompa Jockey</h2>
             <Card
               title="Ketersediaan"
               style={{ margin: 10, textAlign: 'center' }}
@@ -1697,7 +1795,7 @@ const Dashboard: React.FC = () => {
         </Col>
         <Col span={6}>
           <Card style={{ width: '100%', height: '100%' }}>
-            <h3>Pompa Elektrik</h3>
+            <h2>Pompa Elektrik</h2>
             <Card
               title="Ketersediaan"
               style={{ margin: 10, textAlign: 'center' }}
@@ -1714,7 +1812,7 @@ const Dashboard: React.FC = () => {
         </Col>
         <Col span={6}>
           <Card style={{ width: '100%', height: '100%' }}>
-            <h3>Pompa Diesel</h3>
+            <h2>Pompa Diesel</h2>
             <Card
               title="Ketersediaan"
               style={{ margin: 5, textAlign: 'center' }}
@@ -1731,7 +1829,7 @@ const Dashboard: React.FC = () => {
         </Col>
         <Col span={6}>
           <Card style={{ width: '100%', height: '100%' }}>
-            <h3>Pompa Portable</h3>
+            <h2>Pompa Portable</h2>
             <Card
               title="Ketersediaan"
               style={{ margin: 10, textAlign: 'center' }}
@@ -1782,7 +1880,7 @@ const Dashboard: React.FC = () => {
       <Row gutter={24} style={{ margin: 10 }}>
         <Col span={6}>
           <Card style={{ width: '100%', height: '100%' }}>
-            <h3>Petugas Peran Kebakaran</h3>
+            <h2>Petugas Peran Kebakaran</h2>
 
             <Card title="Kesiapan" style={{ margin: 10, textAlign: 'center' }}>
               <b>{petugasPeranKesiapan}</b>
@@ -1794,7 +1892,7 @@ const Dashboard: React.FC = () => {
         </Col>
         <Col span={6}>
           <Card style={{ width: '100%', height: '100%' }}>
-            <h3>Regu Penanggulangan</h3>
+            <h2>Regu Penanggulangan</h2>
 
             <Card title="Kesiapan" style={{ margin: 10, textAlign: 'center' }}>
               <b>{reguPenanggulanganKesiapan}</b>
@@ -1806,7 +1904,7 @@ const Dashboard: React.FC = () => {
         </Col>
         <Col span={6}>
           <Card style={{ width: '100%', height: '100%' }}>
-            <h3>Koordinator Kebakaran</h3>
+            <h2>Koordinator Kebakaran</h2>
 
             <Card title="Kesiapan" style={{ margin: 5, textAlign: 'center' }}>
               <b>{koordKebakaranKesiapan}</b>
@@ -1818,7 +1916,7 @@ const Dashboard: React.FC = () => {
         </Col>
         <Col span={6}>
           <Card style={{ width: '100%', height: '100%' }}>
-            <h3>Ahli K3 Kebakaran</h3>
+            <h2>Ahli K3 Kebakaran</h2>
 
             <Card title="Kesiapan" style={{ margin: 10, textAlign: 'center' }}>
               <b>{ahliK3KebakaranKesiapan}</b>

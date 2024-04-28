@@ -65,6 +65,8 @@ const normFile = (e: any) => {
 const FormArea: React.FC = () => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
+  const roleName = localStorage.getItem('rolename');
+  const isHO = roleName && roleName.endsWith('-HO');
   const [data, setData] = React.useState<DataType[]>([]);
   const [dataEdit, setDataEdit] = React.useState<DataType[]>([]);
   const [openModalAdd, setOpenModalAdd] = React.useState(false);
@@ -602,6 +604,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -639,6 +642,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -675,6 +679,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -711,6 +716,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -747,6 +753,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -783,6 +790,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -819,6 +827,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -855,6 +864,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -891,6 +901,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -927,6 +938,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -963,6 +975,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -999,6 +1012,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -1035,6 +1049,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -1071,6 +1086,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -1107,6 +1123,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -1143,6 +1160,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -1179,6 +1197,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -1215,6 +1234,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -1251,6 +1271,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -1287,6 +1308,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -1323,6 +1345,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -1359,6 +1382,7 @@ const FormArea: React.FC = () => {
               >
                 <InputNumber
                   placeholder="Kecukupan"
+                  disabled={roleName !== 'ADMIN' && !isHO}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
