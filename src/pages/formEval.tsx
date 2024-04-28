@@ -116,11 +116,27 @@ const FormEval: React.FC = () => {
       .validateFields()
       .then((values) => {
         // Format the dead_line date field
-        const requestBody = {
-          ...values,
-          account_name: localStorage.getItem('name'),
-          role: localStorage.getItem('rolename'),
-        };
+        let requestBody = {};
+        if (
+          values.corrective_action &&
+          values.dead_line &&
+          values.dept &&
+          values.pic &&
+          values.preventive_action &&
+          values.problem_identification &&
+          values.root_cause &&
+          values.status
+        ) {
+          requestBody = {
+            ...values,
+            account_name: localStorage.getItem('name'),
+            role: localStorage.getItem('rolename'),
+          };
+        } else {
+          error('Please fill all the fields');
+          return;
+        }
+
         // Send POST request with the form data
         if (editMode) {
           fetch(`${config.apiUrl}/form-eval-proteksi-kebakaran/edit/${id}`, {
@@ -378,10 +394,7 @@ const FormEval: React.FC = () => {
             <Input placeholder="preventive action" />
           </Form.Item>
           <Form.Item label="DEAD LINE" name="dead_line">
-            <DatePicker
-              defaultValue={dayjs('01/01/2015', dateFormat)}
-              format={dateFormat}
-            />
+            <DatePicker format={dateFormat} />
           </Form.Item>
           <Form.Item label="PIC" name="pic">
             <Input placeholder="pic" />

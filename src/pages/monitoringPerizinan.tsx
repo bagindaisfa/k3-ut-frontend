@@ -154,11 +154,27 @@ const MonitoringPerizinan: React.FC = () => {
       .validateFields()
       .then((values) => {
         // Format the dead_line date field
-        const requestBody = {
-          ...values,
-          account_name: localStorage.getItem('name'),
-          role: localStorage.getItem('rolename'),
-        };
+        let requestBody = {};
+        if (
+          values.area &&
+          values.batas_waktu_perizinan &&
+          values.hasil_pemeriksaan &&
+          values.jml_instalasi &&
+          values.keterangan &&
+          values.link_dokumen &&
+          values.no_izin_pengesahan &&
+          values.objek_perizinan &&
+          values.pelaksanaan_pemeriksaan
+        ) {
+          requestBody = {
+            ...values,
+            account_name: localStorage.getItem('name'),
+            role: localStorage.getItem('rolename'),
+          };
+        } else {
+          error('Please fill all the fields');
+          return;
+        }
         // Send POST request with the form data
         if (editMode) {
           fetch(`${config.apiUrl}/legal-spi/edit/${id}`, {
@@ -430,10 +446,7 @@ const MonitoringPerizinan: React.FC = () => {
             label="Pelaksanaan Pemeriksaan"
             name="pelaksanaan_pemeriksaan"
           >
-            <DatePicker
-              defaultValue={dayjs('01/01/2015', dateFormat)}
-              format={dateFormat}
-            />
+            <DatePicker format={dateFormat} />
           </Form.Item>
           <Form.Item label="Hasil Pemeriksaan" name="hasil_pemeriksaan">
             <Select
@@ -451,10 +464,7 @@ const MonitoringPerizinan: React.FC = () => {
             />
           </Form.Item>
           <Form.Item label="Batas Waktu Perizinan" name="batas_waktu_perizinan">
-            <DatePicker
-              defaultValue={dayjs('01/01/2015', dateFormat)}
-              format={dateFormat}
-            />
+            <DatePicker format={dateFormat} />
           </Form.Item>
 
           <Form.Item

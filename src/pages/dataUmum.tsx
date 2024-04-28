@@ -304,9 +304,9 @@ const DataUmum: React.FC = () => {
               fetchData(cabang, site, plant, year, month);
               setOpenModalAdd(false);
             })
-            .catch((error) => {
-              error(error.toString());
-              console.error('Error edit form data:', error);
+            .catch((err) => {
+              error(err.toString());
+              console.error('Error edit form data:', err);
             });
         } else {
           fetch(`${config.apiUrl}/proteksi-kebakaran/save`, {
@@ -341,9 +341,9 @@ const DataUmum: React.FC = () => {
               fetchData(cabang, site, plant, year, month);
               setOpenModalAdd(false);
             })
-            .catch((error) => {
-              error(error.toString());
-              console.error('Error posting form data:', error);
+            .catch((err) => {
+              error(err.toString());
+              console.error('Error posting form data:', err);
             });
         }
       })

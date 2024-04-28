@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { Card, Col, Row, Select, DatePicker } from 'antd';
+import { Card, Col, Row, Select, DatePicker, Spin, Tooltip } from 'antd';
 import type { TableProps, DatePickerProps } from 'antd';
 import { config } from '../config';
 import { Column } from '@ant-design/plots';
+import dayjs from 'dayjs';
 
 interface FieldSums {
   [key: string]: number;
@@ -13,6 +14,9 @@ interface DataItem {
 }
 
 const Dashboard: React.FC = () => {
+  const [loadingPage, setLoadingPage] = React.useState<boolean>(false);
+  const [defaultMonth, setDefaultMonth] = React.useState(dayjs().month() + 1); // Add 1 because dayjs().month() returns zero-based month index
+  const [defaultYear, setDefaultYear] = React.useState(dayjs().year());
   const [month, setMonth] = React.useState(new Date().getMonth() + 1);
   const [year, setYear] = React.useState(new Date().getFullYear());
   const [cabang, setCabang] = React.useState<string>('');
@@ -110,6 +114,7 @@ const Dashboard: React.FC = () => {
   }, []);
 
   const getDataCabang = () => {
+    setLoadingPage(true);
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('Token not found in localStorage.');
@@ -136,6 +141,7 @@ const Dashboard: React.FC = () => {
           localStorage.removeItem('rolename');
           localStorage.removeItem('token');
           window.location.href = '/login';
+          setLoadingPage(false);
         }
         throw new Error('Network response was not ok.');
       })
@@ -150,6 +156,7 @@ const Dashboard: React.FC = () => {
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
+        setLoadingPage(false);
       });
   };
 
@@ -180,6 +187,7 @@ const Dashboard: React.FC = () => {
           localStorage.removeItem('rolename');
           localStorage.removeItem('token');
           window.location.href = '/login';
+          setLoadingPage(false);
         }
         throw new Error('Network response was not ok.');
       })
@@ -193,6 +201,7 @@ const Dashboard: React.FC = () => {
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
+        setLoadingPage(false);
       });
   };
 
@@ -311,6 +320,7 @@ const Dashboard: React.FC = () => {
           localStorage.removeItem('rolename');
           localStorage.removeItem('token');
           window.location.href = '/login';
+          setLoadingPage(false);
         }
         throw new Error('Network response was not ok.');
       })
@@ -1469,9 +1479,11 @@ const Dashboard: React.FC = () => {
               sumsWarehouse.diesel_pump_kesiapan +
               sumsMess.diesel_pump_kesiapan
         );
+        setLoadingPage(false);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
+        setLoadingPage(false);
       });
 
     fetch(
@@ -1500,6 +1512,7 @@ const Dashboard: React.FC = () => {
           localStorage.removeItem('rolename');
           localStorage.removeItem('token');
           window.location.href = '/login';
+          setLoadingPage(false);
         }
         throw new Error('Network response was not ok.');
       })
@@ -1509,6 +1522,7 @@ const Dashboard: React.FC = () => {
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
+        setLoadingPage(false);
       });
   };
 
@@ -1517,37 +1531,59 @@ const Dashboard: React.FC = () => {
     borderRadius: '8px', // Optional: Add border radius for rounded corners
     height: 440,
   };
-  return (
+
+  const defaultDate = dayjs(`${defaultYear}-${defaultMonth}-01`, 'YYYY-MM-DD');
+
+  return loadingPage ? (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center', // Horizontally center the Spin
+        alignItems: 'center', // Vertically center the Spin
+        minHeight: '100vh', // Ensure the container covers the entire viewport height
+      }}
+    >
+      <Spin size="large" />
+    </div>
+  ) : (
     <>
-      <Select
-        defaultValue={
-          optionsCabang[0] ? optionsCabang[0].value : 'Please Select'
-        }
-        style={{ width: 150, margin: 16 }}
-        onChange={handleChangeCabang}
-        options={optionsCabang}
-      />
-      <Select
-        defaultValue={optionsSite[0] ? optionsSite[0].value : 'Please Select'}
-        style={{ width: 150, margin: 16 }}
-        onChange={handleChangeSite}
-        options={optionsSite}
-      />
-      <Select
-        defaultValue={'all'}
-        style={{ width: 150, margin: 16 }}
-        onChange={handleChangeBangunan}
-        options={optionsBangunan}
-      />
+      <Tooltip title="Cabang">
+        <Select
+          defaultValue={
+            optionsCabang[0] ? optionsCabang[0].value : 'Please Select'
+          }
+          style={{ width: 150, margin: 16 }}
+          onChange={handleChangeCabang}
+          options={optionsCabang}
+        />
+      </Tooltip>
+      <Tooltip title="Site">
+        <Select
+          defaultValue={optionsSite[0] ? optionsSite[0].value : 'Please Select'}
+          style={{ width: 150, margin: 16 }}
+          onChange={handleChangeSite}
+          options={optionsSite}
+        />
+      </Tooltip>
+      <Tooltip title="Bangunan">
+        <Select
+          defaultValue={'all'}
+          style={{ width: 150, margin: 16 }}
+          onChange={handleChangeBangunan}
+          options={optionsBangunan}
+        />
+      </Tooltip>
       <DatePicker
         onChange={onChangeMonth}
         picker="month"
         style={{ margin: 16 }}
+        defaultValue={dayjs()}
       />
       <DatePicker
         onChange={onChangeYear}
         picker="year"
         style={{ margin: 16 }}
+        defaultValue={dayjs()}
       />
       <Row gutter={24} style={{ margin: 10 }}>
         <Col span={8}>
