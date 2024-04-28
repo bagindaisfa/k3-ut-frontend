@@ -571,7 +571,12 @@ const Dashboard: React.FC = () => {
                     ? sumsWorkshop.apar_AF11_kesiapan
                     : bangunan === 'warehouse'
                     ? sumsWarehouse.apar_AF11_kesiapan
-                    : sumsMess.apar_AF11_kesiapan,
+                    : bangunan === 'mess'
+                    ? sumsMess.apar_AF11_kesiapan
+                    : sumsOffice.apar_AF11_kesiapan +
+                      sumsWorkshop.apar_AF11_kesiapan +
+                      sumsWarehouse.apar_AF11_kesiapan +
+                      sumsMess.apar_AF11_kesiapan,
               },
               {
                 status: 'Kesiapan',
