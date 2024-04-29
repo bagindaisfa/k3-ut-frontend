@@ -30,11 +30,13 @@ const Dashboard: React.FC = () => {
   const [defaultYear, setDefaultYear] = React.useState(dayjs().year());
   const [month, setMonth] = React.useState(new Date().getMonth() + 1);
   const [year, setYear] = React.useState(new Date().getFullYear());
-  const [cabang, setCabang] = React.useState<string>('');
-  const [site, setSite] = React.useState<string>('');
+  const [cabang, setCabang] = React.useState<string>('none');
+  const [site, setSite] = React.useState<string>('none');
+  const [plant, setPlant] = React.useState<string>('none');
   const [bangunan, setBangunan] = React.useState<string>('all');
   const [optionsCabang, setOptionsCabang] = React.useState<any[]>([]);
   const [optionsSite, setOptionsSite] = React.useState<any[]>([]);
+  const [optionsPlant, setOptionsPlant] = React.useState<any[]>([]);
   const [optionsBangunan, setOptionsBangunan] = React.useState<any[]>([
     { value: 'all', label: 'All' },
     {
@@ -124,6 +126,10 @@ const Dashboard: React.FC = () => {
     getDataCabang();
   }, []);
 
+  useEffect(() => {
+    fetchData(cabang, site, plant, bangunan, year, month);
+  }, [cabang, site, plant, bangunan, year, month]);
+
   const getDataCabang = () => {
     setLoadingPage(true);
     const token = localStorage.getItem('token');
@@ -161,8 +167,11 @@ const Dashboard: React.FC = () => {
         const result = cabangs.map((item: any) => {
           return { value: item, label: item };
         });
-        setOptionsCabang(result);
-
+        setOptionsCabang([
+          { value: 'none', label: 'Select Cabang' },
+          ...result,
+        ]);
+        setCabang(result[0].value);
         getDataSite(result[0].value);
       })
       .catch((error) => {
@@ -207,8 +216,8 @@ const Dashboard: React.FC = () => {
         const result = sites.map((item: any) => {
           return { value: item, label: item };
         });
-        setOptionsSite(result);
-        fetchData(cabang, result[0].value, bangunan, year, month);
+        setOptionsSite([{ value: 'none', label: 'Select Site' }, ...result]);
+        getDataPlant(cabang);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -216,59 +225,82 @@ const Dashboard: React.FC = () => {
       });
   };
 
+  const getDataPlant = (cabang: string) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token not found in localStorage.');
+      window.location.href = '/login';
+      return;
+    }
+
+    fetch(`${config.apiUrl}/master-plant/get`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`, // Include bearer token in the headers
+        'Content-Type': 'application/json',
+        'client-id': config.clientID,
+        'client-secret': config.clientSecret,
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        if (response.status === 401) {
+          localStorage.removeItem('isLogin');
+          localStorage.removeItem('name');
+          localStorage.removeItem('rolename');
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+        }
+        throw new Error('Network response was not ok.');
+      })
+      .then((data) => {
+        const plants = data.data
+          .filter((item: any) => item._id !== 'undefined') // Filter out items with _id set to "undefined"
+          .map((item: any) => item._id);
+
+        const result = plants.map((item: any) => {
+          return { value: item, label: item };
+        });
+
+        setOptionsPlant([{ value: 'none', label: 'Select Plant' }, ...result]);
+
+        fetchData(cabang, 'none', 'none', bangunan, year, month);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  };
+
   const onChangeYear: DatePickerProps['onChange'] = (date, dateString) => {
     setYear(new Date(dateString as string).getFullYear());
-    fetchData(
-      cabang,
-      site,
-      bangunan,
-      new Date(dateString as string).getFullYear(),
-      month
-    );
   };
 
   const onChangeMonth: DatePickerProps['onChange'] = (date, dateString) => {
     setMonth(new Date(dateString as string).getMonth() + 1);
-    fetchData(
-      cabang,
-      site,
-      bangunan,
-      year,
-      new Date(dateString as string).getMonth() + 1
-    );
   };
 
   const handleChangeCabang = (value: any) => {
     setCabang(value);
-    fetchData(
-      value,
-      site ? site : optionsSite[0].value,
-      bangunan ? bangunan : optionsBangunan[0].value,
-      year,
-      month
-    );
+    setSite('none');
+    setPlant('none');
   };
 
   const handleChangeSite = (value: any) => {
     setSite(value);
-    fetchData(
-      cabang ? cabang : optionsCabang[0].value,
-      value,
-      bangunan ? bangunan : optionsBangunan[0].value,
-      year,
-      month
-    );
+    setCabang('none');
+    setPlant('none');
+  };
+
+  const handleChangePlant = (value: any) => {
+    setPlant(value);
+    setCabang('none');
+    setSite('none');
   };
 
   const handleChangeBangunan = (value: any) => {
     setBangunan(value);
-    fetchData(
-      cabang ? cabang : optionsCabang[0].value,
-      site ? site : optionsSite[0].value,
-      value,
-      year,
-      month
-    );
   };
 
   const calculateSumForFields = (
@@ -296,6 +328,7 @@ const Dashboard: React.FC = () => {
   const fetchData = (
     cabang: string,
     site: string,
+    plant: string,
     bangunan: string,
     year: number,
     month: number
@@ -310,7 +343,7 @@ const Dashboard: React.FC = () => {
     fetch(
       `${config.apiUrl}/proteksi-kebakaran-dash/get?role=${localStorage.getItem(
         'rolename'
-      )}&year=${year}&month=${month}&cabang=${cabang}`,
+      )}&year=${year}&month=${month}&cabang=${cabang}&site=${site}&plant=${plant}`,
       {
         method: 'GET',
         headers: {
@@ -1560,9 +1593,7 @@ const Dashboard: React.FC = () => {
     <>
       <Tooltip title="Cabang">
         <Select
-          defaultValue={
-            optionsCabang[0] ? optionsCabang[0].value : 'Please Select'
-          }
+          value={cabang}
           style={{ width: 150, margin: 16 }}
           onChange={handleChangeCabang}
           options={optionsCabang}
@@ -1570,10 +1601,18 @@ const Dashboard: React.FC = () => {
       </Tooltip>
       <Tooltip title="Site">
         <Select
-          defaultValue={optionsSite[0] ? optionsSite[0].value : 'Please Select'}
+          value={site}
           style={{ width: 150, margin: 16 }}
           onChange={handleChangeSite}
           options={optionsSite}
+        />
+      </Tooltip>
+      <Tooltip title="Plant">
+        <Select
+          value={plant}
+          style={{ width: 150, margin: 16 }}
+          onChange={handleChangePlant}
+          options={optionsPlant}
         />
       </Tooltip>
       <Tooltip title="Bangunan">

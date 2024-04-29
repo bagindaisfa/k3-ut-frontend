@@ -77,7 +77,17 @@ const App: React.FC = () => {
         width={265}
       >
         <div className="demo-logo-vertical">
-          <Image src={''} preview={false} />
+          <div style={{ padding: 10 }}>
+            <span
+              style={{
+                width: '100%',
+                height: '45px',
+                border: '1px solid rgb(177 166 166)',
+                display: 'flex',
+                backgroundColor: 'whitesmoke',
+              }}
+            ></span>
+          </div>
         </div>
         <Menu
           theme="light"

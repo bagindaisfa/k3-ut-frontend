@@ -79,6 +79,8 @@ const FormArea: React.FC = () => {
   const [fileName, setFileName] = React.useState<string>('');
   const [fileNo, setFileNo] = React.useState<string>('');
   const [optionsCabang, setOptionsCabang] = React.useState<any[]>([]);
+  const [optionsSite, setOptionsSite] = React.useState<any[]>([]);
+  const [optionsPlant, setOptionsPlant] = React.useState<any[]>([]);
   const [optionsBangunan, setOptionsBangunan] = React.useState<any[]>([
     {
       value: 'office',
@@ -136,7 +138,6 @@ const FormArea: React.FC = () => {
 
   useEffect(() => {
     getDataCabang();
-    fetchData(cabang, bangunan, year, month);
   }, []);
 
   const handleOkAdd = () => {
@@ -397,11 +398,104 @@ const FormArea: React.FC = () => {
           return { value: item, label: item };
         });
         setOptionsCabang(result);
+        getDataSite(result[0].value);
       })
       .catch((err) => {
         console.error('Error fetching data:', err);
       });
   };
+
+  const getDataSite = (cabang: string) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token not found in localStorage.');
+      window.location.href = '/login';
+      return;
+    }
+
+    fetch(`${config.apiUrl}/master-site/get`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`, // Include bearer token in the headers
+        'Content-Type': 'application/json',
+        'client-id': config.clientID,
+        'client-secret': config.clientSecret,
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        if (response.status === 401) {
+          localStorage.removeItem('isLogin');
+          localStorage.removeItem('name');
+          localStorage.removeItem('rolename');
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+        }
+        throw new Error('Network response was not ok.');
+      })
+      .then((data) => {
+        const sites = data.data.map((item: any) => item._id);
+        const result = sites.map((item: any) => {
+          return { value: item, label: item };
+        });
+        setOptionsSite(result);
+        getDataPlant();
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  };
+
+  const getDataPlant = () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token not found in localStorage.');
+      window.location.href = '/login';
+      return;
+    }
+
+    fetch(`${config.apiUrl}/master-plant/get`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`, // Include bearer token in the headers
+        'Content-Type': 'application/json',
+        'client-id': config.clientID,
+        'client-secret': config.clientSecret,
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        if (response.status === 401) {
+          localStorage.removeItem('isLogin');
+          localStorage.removeItem('name');
+          localStorage.removeItem('rolename');
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+        }
+        throw new Error('Network response was not ok.');
+      })
+      .then((data) => {
+        const plants = data.data
+          .filter((item: any) => item._id !== 'undefined') // Filter out items with _id set to "undefined"
+          .map((item: any) => item._id);
+
+        const result = plants.map((item: any) => {
+          return { value: item, label: item };
+        });
+
+        setOptionsPlant(result);
+
+        fetchData(cabang, bangunan, year, month);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  };
+
   const handleCancelAdd = () => {
     setOpenModalAdd(false);
   };
@@ -536,6 +630,12 @@ const FormArea: React.FC = () => {
         >
           <Form.Item label="Cabang" name="cabang">
             <Select style={{ width: '100%' }} options={optionsCabang} />
+          </Form.Item>
+          <Form.Item label="Site" name="site">
+            <Select style={{ width: '100%' }} options={optionsSite} />
+          </Form.Item>
+          <Form.Item label="plant" name="plant">
+            <Select style={{ width: '100%' }} options={optionsPlant} />
           </Form.Item>
           <Form.Item label="Bangunan" name="bangunan">
             <Select style={{ width: '100%' }} options={optionsBangunan} />
