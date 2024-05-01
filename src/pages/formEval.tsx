@@ -372,34 +372,112 @@ const FormEval: React.FC = () => {
         onCancel={handleCancelAdd}
       >
         <Form layout="vertical" form={form} style={{ maxWidth: 600 }}>
-          <Form.Item label="Department / Divisi" name="dept">
-            <Input placeholder="input placeholder" />
-          </Form.Item>
-          <Form.Item label="Keterangan" name="keterangan">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="Department / Divisi"
+            name="dept"
+          >
             <Input placeholder="input placeholder" />
           </Form.Item>
           <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="Keterangan"
+            name="keterangan"
+          >
+            <Input placeholder="input placeholder" />
+          </Form.Item>
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
             label="PROBLEM IDENTIFICATION"
             name="problem_identification"
           >
             <Input placeholder="input placeholder" />
           </Form.Item>
-          <Form.Item label="ROOT CAUSE" name="root_cause">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="ROOT CAUSE"
+            name="root_cause"
+          >
             <Input placeholder="root cause" />
           </Form.Item>
-          <Form.Item label="CORRECTIVE ACTION" name="corrective_action">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="CORRECTIVE ACTION"
+            name="corrective_action"
+          >
             <Input placeholder="corrective action" />
           </Form.Item>
-          <Form.Item label="PREVENTIVE ACTION" name="preventive_action">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="PREVENTIVE ACTION"
+            name="preventive_action"
+          >
             <Input placeholder="preventive action" />
           </Form.Item>
-          <Form.Item label="DEAD LINE" name="dead_line">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="DEAD LINE"
+            name="dead_line"
+          >
             <DatePicker format={dateFormat} />
           </Form.Item>
-          <Form.Item label="PIC" name="pic">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="PIC"
+            name="pic"
+          >
             <Input placeholder="pic" />
           </Form.Item>
-          <Form.Item label="STATUS" name="status">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="STATUS"
+            name="status"
+          >
             <Select
               value={status}
               style={{ width: '100%' }}

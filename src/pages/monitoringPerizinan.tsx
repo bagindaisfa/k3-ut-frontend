@@ -430,25 +430,76 @@ const MonitoringPerizinan: React.FC = () => {
         onCancel={handleCancelAdd}
       >
         <Form layout="vertical" form={form} style={{ maxWidth: 600 }}>
-          <Form.Item label="Objek Perizinan" name="objek_perizinan">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="Objek Perizinan"
+            name="objek_perizinan"
+          >
             <Input placeholder="input placeholder" />
           </Form.Item>
-          <Form.Item label="Area" name="area">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="Area"
+            name="area"
+          >
             <Input placeholder="input placeholder" />
           </Form.Item>
-          <Form.Item label="No Izin Pengesahan" name="no_izin_pengesahan">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="No Izin Pengesahan"
+            name="no_izin_pengesahan"
+          >
             <Input placeholder="input placeholder" />
           </Form.Item>
-          <Form.Item label="Jumlah Instalasi" name="jml_instalasi">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="Jumlah Instalasi"
+            name="jml_instalasi"
+          >
             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
             label="Pelaksanaan Pemeriksaan"
             name="pelaksanaan_pemeriksaan"
           >
             <DatePicker format={dateFormat} />
           </Form.Item>
-          <Form.Item label="Hasil Pemeriksaan" name="hasil_pemeriksaan">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="Hasil Pemeriksaan"
+            name="hasil_pemeriksaan"
+          >
             <Select
               style={{ width: '100%' }}
               options={[
@@ -463,17 +514,41 @@ const MonitoringPerizinan: React.FC = () => {
               ]}
             />
           </Form.Item>
-          <Form.Item label="Batas Waktu Perizinan" name="batas_waktu_perizinan">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="Batas Waktu Perizinan"
+            name="batas_waktu_perizinan"
+          >
             <DatePicker format={dateFormat} />
           </Form.Item>
 
           <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
             label="Link Dokumen Perizinan (open access)"
             name="link_dokumen"
           >
             <Input />
           </Form.Item>
-          <Form.Item label="Keterangan" name="keterangan">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="Keterangan"
+            name="keterangan"
+          >
             <Input />
           </Form.Item>
         </Form>

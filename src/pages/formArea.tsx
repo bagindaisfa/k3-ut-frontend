@@ -627,32 +627,93 @@ const FormArea: React.FC = () => {
           onFinish={handleOkAdd}
           layout="vertical"
           style={{ maxWidth: 600 }}
+          scrollToFirstError={true}
         >
-          <Form.Item label="Cabang" name="cabang">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="Cabang"
+            name="cabang"
+          >
             <Select style={{ width: '100%' }} options={optionsCabang} />
           </Form.Item>
-          <Form.Item label="Site" name="site">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="Site"
+            name="site"
+          >
             <Select style={{ width: '100%' }} options={optionsSite} />
           </Form.Item>
-          <Form.Item label="plant" name="plant">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="plant"
+            name="plant"
+          >
             <Select style={{ width: '100%' }} options={optionsPlant} />
           </Form.Item>
-          <Form.Item label="Bangunan" name="bangunan">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="Bangunan"
+            name="bangunan"
+          >
             <Select style={{ width: '100%' }} options={optionsBangunan} />
           </Form.Item>
-          <Form.Item name="luas_bangunan" label="Luas Bangunan">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            name="luas_bangunan"
+            label="Luas Bangunan"
+          >
             <InputNumber
               placeholder="luas bangunan"
               style={{ width: '100%' }}
             />
           </Form.Item>
-          <Form.Item label="Status Kepemilikan" name="status_kepemilikan_area">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="Status Kepemilikan"
+            name="status_kepemilikan_area"
+          >
             <Select style={{ width: '100%' }} options={optionsKepemilikan} />
           </Form.Item>
           <p>Layout denah sistem proteksi kebakaran di office</p>
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="layout_no"
                 label="No Dokumen"
                 style={{ marginBottom: 0 }}
@@ -662,6 +723,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 label="Upload"
                 valuePropName="fileList"
                 name="layout_denah_area"
@@ -677,6 +744,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="push_button_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -689,6 +762,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="push_button_kesiapan"
                 label="Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -698,6 +777,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="push_button_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -715,6 +800,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="heat_detector_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -727,6 +818,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="heat_detector_kesiapan"
                 label="Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -736,6 +833,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="heat_detector_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -752,6 +855,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="smoke_detector_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -764,6 +873,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="smoke_detector_kesiapan"
                 label="Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -773,6 +888,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="smoke_detector_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -789,6 +910,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="alarm_kebakaran_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -801,6 +928,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="alarm_kebakaran_kesiapan"
                 label="Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -810,6 +943,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="alarm_kebakaran_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -826,6 +965,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="sprinkler_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -838,6 +983,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="sprinkler_kesiapan"
                 label="Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -847,6 +998,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="sprinkler_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -863,6 +1020,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="apar_AF11_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -875,6 +1038,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="apar_AF11_kesiapan"
                 label="Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -884,6 +1053,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="apar_AF11_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -900,6 +1075,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="apar_WATER_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -912,6 +1093,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="apar_WATER_kesiapan"
                 label="Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -921,6 +1108,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="apar_WATER_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -937,6 +1130,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="apar_Foam_AFFF_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -949,6 +1148,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="apar_Foam_AFFF_kesiapan"
                 label="Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -958,6 +1163,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="apar_Foam_AFFF_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -974,6 +1185,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="apar_Dry_Chemical_Powder_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -986,6 +1203,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="apar_Dry_Chemical_Powder_kesiapan"
                 label="Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -995,6 +1218,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="apar_Dry_Chemical_Powder_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -1011,6 +1240,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="apar_CO2_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -1023,6 +1258,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="apar_CO2_kesiapan"
                 label="Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -1032,6 +1273,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="apar_CO2_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -1048,6 +1295,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="volume_water_tank_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -1060,6 +1313,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="volume_water_tank_kesiapan"
                 label="Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -1069,6 +1328,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="volume_water_tank_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -1085,6 +1350,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="hydrant_portable_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -1097,6 +1368,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="hydrant_portable_kesiapan"
                 label="Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -1106,6 +1383,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="hydrant_portable_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -1122,6 +1405,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="jockey_pump_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -1134,6 +1423,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="jockey_pump_kesiapan"
                 style={{ marginBottom: 0 }}
                 label="Kesiapan"
@@ -1143,6 +1438,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="jockey_pump_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -1159,6 +1460,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="electric_pump_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -1171,6 +1478,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="electric_pump_kesiapan"
                 label="Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -1180,6 +1493,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="electric_pump_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -1196,6 +1515,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="diesel_pump_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -1208,6 +1533,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="diesel_pump_kesiapan"
                 style={{ marginBottom: 0 }}
                 label="Kesiapan"
@@ -1217,6 +1548,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="diesel_pump_kecukupan"
                 style={{ marginBottom: 0 }}
                 label="Kecukupan"
@@ -1233,6 +1570,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="hydrant_dlm_gedung_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -1245,6 +1588,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="hydrant_dlm_gedung_kesiapan"
                 label="Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -1254,6 +1603,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="hydrant_dlm_gedung_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -1270,6 +1625,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="hydrant_pillar_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -1282,6 +1643,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="hydrant_pillar_kesiapan"
                 label="Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -1291,6 +1658,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="hydrant_pillar_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -1307,6 +1680,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="hydrant_hoose_25_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -1319,6 +1698,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="hydrant_hoose_25_kesiapan"
                 label="Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -1328,6 +1713,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="hydrant_hoose_25_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -1344,6 +1735,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="hydrant_hoose_15_tersedia"
                 label="Tersedia"
                 style={{ marginBottom: 0 }}
@@ -1356,6 +1753,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="hydrant_hoose_15_kesiapan"
                 label="Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -1365,6 +1768,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="hydrant_hoose_15_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -1381,6 +1790,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="nozle_25_tersedia"
                 style={{ marginBottom: 0 }}
                 label="Tersedia"
@@ -1393,6 +1808,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="nozle_25_kesiapan"
                 style={{ marginBottom: 0 }}
                 label="kesiapan"
@@ -1402,6 +1823,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="nozle_25_kecukupan"
                 style={{ marginBottom: 0 }}
                 label="Kecukupan"
@@ -1418,6 +1845,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="nozle_15_tersedia"
                 style={{ marginBottom: 0 }}
                 label="Tersedia"
@@ -1430,6 +1863,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="nozle_15_kesiapan"
                 style={{ marginBottom: 0 }}
                 label="kesiapan"
@@ -1439,6 +1878,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="nozle_15_kecukupan"
                 style={{ marginBottom: 0 }}
                 label="Kecukupan"
@@ -1455,6 +1900,12 @@ const FormArea: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="kunci_hydrant_pillar_tersedia"
                 style={{ marginBottom: 0 }}
                 label="Tersedia"
@@ -1467,6 +1918,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="kunci_hydrant_pillar_kesiapan"
                 label="Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -1476,6 +1933,12 @@ const FormArea: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="kunci_hydrant_pillar_kecukupan"
                 label="Kecukupan"
                 style={{ marginBottom: 0 }}

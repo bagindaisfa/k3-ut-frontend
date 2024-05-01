@@ -995,63 +995,162 @@ const DataUmum: React.FC = () => {
           layout="vertical"
           style={{ maxWidth: 600 }}
         >
-          <Form.Item label="Cabang" name="cabang">
-            <Input style={{ width: '100%' }} />
-          </Form.Item>
-          <Form.Item label="Site" name="site">
-            <Input style={{ width: '100%' }} />
-          </Form.Item>
-          <Form.Item label="Plant" name="plant">
-            <Input style={{ width: '100%' }} />
-          </Form.Item>
-
-          <Form.Item label="Nama BM/SM" name="nama_BM_SM">
-            <Input style={{ width: '100%' }} />
-          </Form.Item>
-          <Form.Item label="Nama ADH" name="nama_ADH">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="Cabang"
+            name="cabang"
+          >
             <Input style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="Site"
+            name="site"
+          >
+            <Input style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="Plant"
+            name="plant"
+          >
+            <Input style={{ width: '100%' }} />
+          </Form.Item>
+
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="Nama BM/SM"
+            name="nama_BM_SM"
+          >
+            <Input style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="Nama ADH"
+            name="nama_ADH"
+          >
+            <Input style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
             label="Nama ESR Officer/Leader"
             name="nama_ESR_Officer_Leader"
           >
             <Input style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
             label="Nomor Telepon ESR Officer/Leader"
             name="nomor_telepon_ESR_Officer_Leader"
           >
             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
             label="Nomor Telepon Damkar Setempat"
             name="nomor_telepon_damkar_setempat"
           >
             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
             label="Nomor Telepon RS Setempat"
             name="nomor_Telepon_RS_setempat"
           >
             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
             label="Jumlah Karyawan, Partner, Vendor dan Siswa PKL:"
             name="jumlah_karyawan"
           >
             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
 
-          <Form.Item name="luas_tanah_keseluruhan" label="Luas Tanah">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            name="luas_tanah_keseluruhan"
+            label="Luas Tanah"
+          >
             <InputNumber
               placeholder="luas bangunan"
               style={{ width: '100%' }}
             />
           </Form.Item>
-          <Form.Item label="Status Kepemilikan" name="status_kepemilikan_area">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
+            label="Status Kepemilikan"
+            name="status_kepemilikan_area"
+          >
             <Select style={{ width: '100%' }} options={optionsKepemilikan} />
           </Form.Item>
           <Form.Item
+            rules={[
+              {
+                required: true,
+                message: 'Please input your data!',
+              },
+            ]}
             label="Upload Sertifikat Kepemilikan"
             valuePropName="fileList"
             name="sertifikat_kepemilikan"
@@ -1065,6 +1164,12 @@ const DataUmum: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="petugas_peran_kebakaran_jumlah_kesiapan"
                 label="Jumlah Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -1074,6 +1179,12 @@ const DataUmum: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="petugas_peran_kebakaran_jumlah_kecukupan"
                 label="Jumlah Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -1083,6 +1194,12 @@ const DataUmum: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 label="Upload"
                 valuePropName="fileList"
                 name="petugas_peran_kebakaran"
@@ -1099,6 +1216,12 @@ const DataUmum: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="regu_penaggulangan_kebakaran_jumlah_kesiapan"
                 label="Jumlah Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -1108,6 +1231,12 @@ const DataUmum: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="regu_penaggulangan_kebakaran_jumlah_kecukupan"
                 label="Jumlah Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -1117,6 +1246,12 @@ const DataUmum: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 label="Upload"
                 valuePropName="fileList"
                 name="regu_penanggulangan_kebakaran"
@@ -1133,6 +1268,12 @@ const DataUmum: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="koordinator_unit_penanggulangan_kebakaran_jumlah_kesiapan"
                 label="Jumlah Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -1142,6 +1283,12 @@ const DataUmum: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="koordinator_unit_penanggulangan_kebakaran_jumlah_kecukupan"
                 label="Jumlah Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -1151,6 +1298,12 @@ const DataUmum: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 label="Upload"
                 valuePropName="fileList"
                 name="koord_regu_penanggulangan_kebakaran"
@@ -1167,6 +1320,12 @@ const DataUmum: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="ahli_k3_spesialis_penanggulangan_kebakaran_jumlah_kesiapan"
                 label="Jumlah Kesiapan"
                 style={{ marginBottom: 0 }}
@@ -1176,6 +1335,12 @@ const DataUmum: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="ahli_k3_spesialis_penanggulangan_kebakaran_jumlah_kecukupan"
                 label="Jumlah Kecukupan"
                 style={{ marginBottom: 0 }}
@@ -1185,6 +1350,12 @@ const DataUmum: React.FC = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 label="Upload"
                 valuePropName="fileList"
                 name="ahli_k3_spesialis_penanggulangan_kebakaran"
@@ -1204,6 +1375,12 @@ const DataUmum: React.FC = () => {
           <Row gutter={24}>
             <Col span={12}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="ibpr_no"
                 label="No Dokumen"
                 style={{ marginBottom: 0 }}
@@ -1213,6 +1390,12 @@ const DataUmum: React.FC = () => {
             </Col>
             <Col span={12}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 label="Upload"
                 valuePropName="fileList"
                 name="identifikasi_bahaya"
@@ -1231,6 +1414,12 @@ const DataUmum: React.FC = () => {
           <Row gutter={24}>
             <Col span={12}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="dokumen_struktur_organisasi_tktd_no"
                 label="No Dokumen"
                 style={{ marginBottom: 0 }}
@@ -1240,6 +1429,12 @@ const DataUmum: React.FC = () => {
             </Col>
             <Col span={12}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 label="Upload"
                 valuePropName="fileList"
                 name="struktur_organisasi_tktd"
@@ -1259,6 +1454,12 @@ const DataUmum: React.FC = () => {
           <Row gutter={24}>
             <Col span={12}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="dokumentasi_sosialisasi_awarreness_no"
                 label="No Dokument"
                 style={{ marginBottom: 0 }}
@@ -1268,6 +1469,12 @@ const DataUmum: React.FC = () => {
             </Col>
             <Col span={12}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 label="Upload"
                 valuePropName="fileList"
                 name="dokumentasi_sosialisasi"
@@ -1286,6 +1493,12 @@ const DataUmum: React.FC = () => {
           <Row gutter={24}>
             <Col span={12}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="rekam_data_inspeksi_no"
                 label="No Dokumen"
                 style={{ marginBottom: 0 }}
@@ -1295,6 +1508,12 @@ const DataUmum: React.FC = () => {
             </Col>
             <Col span={12}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 label="Upload"
                 valuePropName="fileList"
                 name="rekam_data_inspeksi"
@@ -1312,6 +1531,12 @@ const DataUmum: React.FC = () => {
           <Row gutter={24}>
             <Col span={12}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="dokumen_laporan_simulasi_no"
                 label="No Dokumen"
                 style={{ marginBottom: 0 }}
@@ -1321,6 +1546,12 @@ const DataUmum: React.FC = () => {
             </Col>
             <Col span={12}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 label="Upload"
                 valuePropName="fileList"
                 name="dokumen_laporan_simulasi"
@@ -1339,6 +1570,12 @@ const DataUmum: React.FC = () => {
           <Row gutter={24}>
             <Col span={12}>
               <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 name="absensi_karyawan_no"
                 label="No Dokumen"
                 style={{ marginBottom: 0 }}
