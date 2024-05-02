@@ -14,7 +14,7 @@ import {
 } from 'antd';
 import type { TableProps, DatePickerProps } from 'antd';
 import { config } from '../config';
-import { Column } from '@ant-design/plots';
+import { Column, Pie } from '@ant-design/plots';
 import dayjs from 'dayjs';
 
 const { Text } = Typography;
@@ -42,6 +42,8 @@ const Dashboard: React.FC = () => {
   const [plant, setPlant] = React.useState<string>('none');
   const [bangunan, setBangunan] = React.useState<string>('all');
   const [id, setId] = React.useState<string>('');
+  const [jmlPersyaratan, setJmlPersyaratan] = React.useState<number>(0);
+  const [jmlPerizinan, setJmlPerizinan] = React.useState<number>(0);
   const [rekomendasi, setRekomendasi] = React.useState<string>('');
   const [optionsCabang, setOptionsCabang] = React.useState<any[]>([]);
   const [optionsSite, setOptionsSite] = React.useState<any[]>([]);
@@ -73,6 +75,9 @@ const Dashboard: React.FC = () => {
   const [chartConfigHoose25, setChartConfigHoose25] = React.useState<any>();
   const [chartConfigNozle25, setChartConfigNozle25] = React.useState<any>();
   const [chartConfigNozle15, setChartConfigNozle15] = React.useState<any>();
+  const [chartConfigPersyaratan, setChartConfigPersyaratan] =
+    React.useState<any>();
+  const [chartConfigPerizinan, setChartConfigPerizinan] = React.useState<any>();
 
   const [hydrantPortableTersedia, setHydrantPortableTersedia] =
     React.useState<number>(0);
@@ -406,6 +411,8 @@ const Dashboard: React.FC = () => {
     fetch(
       `${config.apiUrl}/proteksi-kebakaran-dash/get?role=${localStorage.getItem(
         'rolename'
+      )}&account_name=${localStorage.getItem(
+        'name'
       )}&year=${year}&month=${month}&cabang=${cabang}&site=${site}&plant=${plant}`,
       {
         method: 'GET',
@@ -1588,7 +1595,7 @@ const Dashboard: React.FC = () => {
               sumsWarehouse.diesel_pump_kesiapan +
               sumsMess.diesel_pump_kesiapan
         );
-        setLoadingPage(false);
+        getDataPerizinan(year, month);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -1600,6 +1607,8 @@ const Dashboard: React.FC = () => {
         config.apiUrl
       }/proteksi-kebakaran-dashboard-area/get?role=${localStorage.getItem(
         'rolename'
+      )}&account_name=${localStorage.getItem(
+        'name'
       )}&year=${year}&month=${month}&cabang=${cabang}&bangunan=${bangunan}`,
       {
         method: 'GET',
@@ -1635,6 +1644,246 @@ const Dashboard: React.FC = () => {
       });
   };
 
+  const getDataPerizinan = (year: number, month: number) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token not found in localStorage.');
+      window.location.href = '/login';
+      return;
+    }
+
+    fetch(
+      `${config.apiUrl}/legal-spi/get?role=${localStorage.getItem(
+        'rolename'
+      )}&account_name=${localStorage.getItem(
+        'name'
+      )}&year=${year}&month=${month}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`, // Include bearer token in the headers
+          'Content-Type': 'application/json',
+          'client-id': config.clientID,
+          'client-secret': config.clientSecret,
+        },
+      }
+    )
+      .then(async (response) => {
+        if (response.ok) {
+          return response.json();
+        }
+
+        if (response.status === 401) {
+          localStorage.removeItem('isLogin');
+          localStorage.removeItem('name');
+          localStorage.removeItem('rolename');
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+        }
+        const data = await response.json();
+        throw new Error(data.error);
+      })
+      .then((data) => {
+        if (data.data.length > 0) {
+          let tidakMemenuhiCount = 0;
+          let memenuhiCount = 0;
+
+          // Calculate sums
+          data.data.forEach((item: any) => {
+            if (item.hasil_pemeriksaan === 'Tidak Memenuhi Persyaratan K3') {
+              tidakMemenuhiCount++;
+            } else if (item.hasil_pemeriksaan === 'Memenuhi Persyaratan K3') {
+              memenuhiCount++;
+            }
+          });
+
+          // Calculate percentages
+          const totalCount = tidakMemenuhiCount + memenuhiCount;
+          setJmlPersyaratan(totalCount);
+          const tidakMemenuhiPercentage =
+            (tidakMemenuhiCount / totalCount) * 100;
+          const memenuhiPercentage = (memenuhiCount / totalCount) * 100;
+          const configPersyaratan = {
+            data: [
+              {
+                status: 'Memenuhi ' + memenuhiCount,
+                persentase: memenuhiPercentage,
+              },
+              {
+                status: 'Tidak Memenuhi ' + tidakMemenuhiCount,
+                persentase: tidakMemenuhiPercentage,
+              },
+            ],
+            angleField: 'persentase',
+            colorField: 'status',
+            label: {
+              formatter: (text: any, item: any) => {
+                return `${item.persentase}%`; // Add '%' symbol to the value
+              },
+              style: {
+                fontWeight: 'bold',
+              },
+            },
+            legend: {
+              color: {
+                title: false,
+                position: 'right',
+                rowPadding: 5,
+              },
+            },
+          };
+
+          setChartConfigPersyaratan(configPersyaratan);
+        } else {
+          setJmlPersyaratan(0);
+
+          const configPersyaratan = {
+            data: [
+              { status: 'Memenuhi ' + 0, persentase: 0 },
+              {
+                status: 'Tidak Memenuhi ' + 0,
+                persentase: 0,
+              },
+            ],
+            angleField: 'persentase',
+            colorField: 'status',
+            label: {
+              formatter: (text: any, item: { persentase: any }) => {
+                return `${item.persentase}%`; // Add '%' symbol to the value
+              },
+              style: {
+                fontWeight: 'bold',
+              },
+            },
+            legend: {
+              color: {
+                title: false,
+                position: 'right',
+                rowPadding: 5,
+              },
+            },
+          };
+
+          setChartConfigPersyaratan(configPersyaratan);
+        }
+
+        getIzinChart(data.data);
+        setLoadingPage(false);
+      })
+      .catch((err) => {
+        error(err.toString());
+        console.error('Error fetching data:', err);
+      });
+  };
+
+  const getIzinChart = (data: any) => {
+    if (data.length > 0) {
+      // Calculate today's date
+      const today = new Date();
+
+      // Function to calculate the difference in days between two dates
+      const dateDiffInDays = (date1: any, date2: any) => {
+        const diffInMs = date2 - date1; // Subtract date1 from date2
+        return Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+      };
+
+      // Initialize counters
+      let berlakuCount = 0;
+      let tidakBerlakuCount = 0;
+
+      // Iterate over data
+      data.forEach((item: any) => {
+        // Convert batas_waktu_perizinan to a Date object
+        const batasWaktuPerizinanDate = new Date(item.batas_waktu_perizinan);
+
+        // Calculate the difference in days between batas_waktu_perizinan and today
+        const daysDifference = dateDiffInDays(today, batasWaktuPerizinanDate);
+
+        // Check conditions and increment counters accordingly
+        if (item.status_perizinan === 'Berlaku' && daysDifference > 60) {
+          berlakuCount++;
+        } else if (
+          item.status_perizinan === 'Tidak Berlaku' &&
+          daysDifference <= 60
+        ) {
+          tidakBerlakuCount++;
+        }
+      });
+
+      // Calculate total count
+      const totalCount = berlakuCount + tidakBerlakuCount;
+      setJmlPerizinan(totalCount);
+      // Calculate percentages
+      const berlakuPercentage = (berlakuCount / totalCount) * 100;
+      const tidakBerlakuPercentage = (tidakBerlakuCount / totalCount) * 100;
+
+      const configPerizinan = {
+        data: [
+          {
+            status: 'Berlaku ' + berlakuCount,
+            persentase: berlakuPercentage,
+          },
+          {
+            status: 'Tidak Berlaku ' + tidakBerlakuCount,
+            persentase: tidakBerlakuPercentage,
+          },
+        ],
+        angleField: 'persentase',
+        colorField: 'status',
+        label: {
+          formatter: (text: any, item: any) => {
+            return `${item.persentase}%`; // Add '%' symbol to the value
+          },
+          style: {
+            fontWeight: 'bold',
+          },
+        },
+        legend: {
+          color: {
+            title: false,
+            position: 'right',
+            rowPadding: 5,
+          },
+        },
+      };
+
+      setChartConfigPerizinan(configPerizinan);
+    } else {
+      setJmlPerizinan(0);
+
+      const configPerizinan = {
+        data: [
+          {
+            status: 'Berlaku ' + 0,
+            persentase: 0,
+          },
+          {
+            status: 'Tidak Berlaku ' + 0,
+            persentase: 0,
+          },
+        ],
+        angleField: 'persentase',
+        colorField: 'status',
+        label: {
+          formatter: (text: any, item: any) => {
+            return `${item.persentase}%`; // Add '%' symbol to the value
+          },
+          style: {
+            fontWeight: 'bold',
+          },
+        },
+        legend: {
+          color: {
+            title: false,
+            position: 'right',
+            rowPadding: 5,
+          },
+        },
+      };
+
+      setChartConfigPerizinan(configPerizinan);
+    }
+  };
   const cardStyle = {
     boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', // Adjust shadow properties as needed
     borderRadius: '8px', // Optional: Add border radius for rounded corners
@@ -1660,7 +1909,7 @@ const Dashboard: React.FC = () => {
           <Tooltip title="Cabang">
             <Select
               value={cabang}
-              style={{ width: 150, margin: 16 }}
+              style={{ width: 250, margin: 16 }}
               onChange={handleChangeCabang}
               options={optionsCabang}
             />
@@ -1668,7 +1917,7 @@ const Dashboard: React.FC = () => {
           <Tooltip title="Site">
             <Select
               value={site}
-              style={{ width: 150, margin: 16 }}
+              style={{ width: 250, margin: 16 }}
               onChange={handleChangeSite}
               options={optionsSite}
             />
@@ -1676,7 +1925,7 @@ const Dashboard: React.FC = () => {
           <Tooltip title="Plant">
             <Select
               value={plant}
-              style={{ width: 150, margin: 16 }}
+              style={{ width: 250, margin: 16 }}
               onChange={handleChangePlant}
               options={optionsPlant}
             />
@@ -1684,7 +1933,7 @@ const Dashboard: React.FC = () => {
           <Tooltip title="Bangunan">
             <Select
               defaultValue={'all'}
-              style={{ width: 150, margin: 16 }}
+              style={{ width: 250, margin: 16 }}
               onChange={handleChangeBangunan}
               options={optionsBangunan}
             />
@@ -1692,13 +1941,13 @@ const Dashboard: React.FC = () => {
           <DatePicker
             onChange={onChangeMonth}
             picker="month"
-            style={{ margin: 16 }}
+            style={{ width: 250, margin: 16 }}
             defaultValue={dayjs()}
           />
           <DatePicker
             onChange={onChangeYear}
             picker="year"
-            style={{ margin: 16 }}
+            style={{ width: 250, margin: 16 }}
             defaultValue={dayjs()}
           />
           <Row gutter={24} style={{ margin: 10 }}>
@@ -2095,6 +2344,36 @@ const Dashboard: React.FC = () => {
                 >
                   <b>{ahliK3KebakaranKecukupan}</b>
                 </Card>
+              </Card>
+            </Col>
+          </Row>
+          <Row gutter={24} style={{ margin: 10 }}>
+            <Col span={12}>
+              <Card
+                style={{
+                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', // Adjust shadow properties as needed
+                  borderRadius: '8px', // Optional: Add border radius for rounded corners
+                  width: '100%',
+                  height: '100%',
+                }}
+              >
+                <h2>Grafik Hasil Pemeriksaan Persyaratan K3</h2>
+                <Pie {...chartConfigPersyaratan} />
+                <p>Total Temuan : {jmlPersyaratan}</p>
+              </Card>
+            </Col>
+            <Col span={12}>
+              <Card
+                style={{
+                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', // Adjust shadow properties as needed
+                  borderRadius: '8px', // Optional: Add border radius for rounded corners
+                  width: '100%',
+                  height: '100%',
+                }}
+              >
+                <h2>Grafik Status Perizinan SPI</h2>
+                <Pie {...chartConfigPerizinan} />
+                <p>Total Temuan : {jmlPerizinan}</p>
               </Card>
             </Col>
           </Row>

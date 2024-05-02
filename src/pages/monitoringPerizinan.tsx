@@ -273,6 +273,8 @@ const MonitoringPerizinan: React.FC = () => {
     fetch(
       `${config.apiUrl}/legal-spi/get?role=${localStorage.getItem(
         'rolename'
+      )}&account_name=${localStorage.getItem(
+        'name'
       )}&year=${year}&month=${month}`,
       {
         method: 'GET',

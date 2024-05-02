@@ -228,6 +228,8 @@ const FormEval: React.FC = () => {
         config.apiUrl
       }/form-eval-proteksi-kebakaran/get?role=${localStorage.getItem(
         'rolename'
+      )}&account_name=${localStorage.getItem(
+        'name'
       )}&year=${year}&month=${month}`,
       {
         method: 'GET',

@@ -260,6 +260,8 @@ const FormArea: React.FC = () => {
         config.apiUrl
       }/proteksi-kebakaran-dashboard-area/get?role=${localStorage.getItem(
         'rolename'
+      )}&account_name=${localStorage.getItem(
+        'name'
       )}&year=${year}&month=${month}&cabang=${cabang}&bangunan=${bangunan}`,
       {
         method: 'GET',

@@ -497,6 +497,8 @@ const DataUmum: React.FC = () => {
         config.apiUrl
       }/proteksi-kebakaran-dashboard/get?role=${localStorage.getItem(
         'rolename'
+      )}&account_name=${localStorage.getItem(
+        'name'
       )}&year=${year}&month=${month}&cabang=${cabang}&site=${site}&plant=${plant}`,
       {
         method: 'GET',
@@ -796,7 +798,15 @@ const DataUmum: React.FC = () => {
         <p style={{ textAlign: 'left' }}>Luas Tanah Keseluruhan</p>
         <p style={{ textAlign: 'left' }}>: {luasTanahKeseluruhan}</p>
         <p style={{ textAlign: 'left' }}>Status Kepemilikan Area</p>
-        <p style={{ textAlign: 'left' }}>: {statusKepemilikanArea}</p>
+        <p style={{ textAlign: 'left' }}>
+          : {statusKepemilikanArea} /
+          <Button
+            onClick={() => downloadFile(sertifikatKepemilikanfileName)}
+            type="link"
+          >
+            {sertifikatKepemilikanfileName}
+          </Button>
+        </p>
       </div>
 
       <table border={1} style={{ marginBottom: 20 }}>
@@ -1007,28 +1017,10 @@ const DataUmum: React.FC = () => {
           >
             <Input style={{ width: '100%' }} />
           </Form.Item>
-          <Form.Item
-            rules={[
-              {
-                required: true,
-                message: 'Please input your data!',
-              },
-            ]}
-            label="Site"
-            name="site"
-          >
+          <Form.Item label="Site" name="site">
             <Input style={{ width: '100%' }} />
           </Form.Item>
-          <Form.Item
-            rules={[
-              {
-                required: true,
-                message: 'Please input your data!',
-              },
-            ]}
-            label="Plant"
-            name="plant"
-          >
+          <Form.Item label="Plant" name="plant">
             <Input style={{ width: '100%' }} />
           </Form.Item>
 
@@ -1147,7 +1139,7 @@ const DataUmum: React.FC = () => {
           <Form.Item
             rules={[
               {
-                required: true,
+                required: !editMode,
                 message: 'Please input your data!',
               },
             ]}
@@ -1196,7 +1188,7 @@ const DataUmum: React.FC = () => {
               <Form.Item
                 rules={[
                   {
-                    required: true,
+                    required: !editMode,
                     message: 'Please input your data!',
                   },
                 ]}
@@ -1248,7 +1240,7 @@ const DataUmum: React.FC = () => {
               <Form.Item
                 rules={[
                   {
-                    required: true,
+                    required: !editMode,
                     message: 'Please input your data!',
                   },
                 ]}
@@ -1300,7 +1292,7 @@ const DataUmum: React.FC = () => {
               <Form.Item
                 rules={[
                   {
-                    required: true,
+                    required: !editMode,
                     message: 'Please input your data!',
                   },
                 ]}
@@ -1352,7 +1344,7 @@ const DataUmum: React.FC = () => {
               <Form.Item
                 rules={[
                   {
-                    required: true,
+                    required: !editMode,
                     message: 'Please input your data!',
                   },
                 ]}
@@ -1392,7 +1384,7 @@ const DataUmum: React.FC = () => {
               <Form.Item
                 rules={[
                   {
-                    required: true,
+                    required: !editMode,
                     message: 'Please input your data!',
                   },
                 ]}
@@ -1431,7 +1423,7 @@ const DataUmum: React.FC = () => {
               <Form.Item
                 rules={[
                   {
-                    required: true,
+                    required: !editMode,
                     message: 'Please input your data!',
                   },
                 ]}
@@ -1461,7 +1453,7 @@ const DataUmum: React.FC = () => {
                   },
                 ]}
                 name="dokumentasi_sosialisasi_awarreness_no"
-                label="No Dokument"
+                label="No Dokumen"
                 style={{ marginBottom: 0 }}
               >
                 <Input style={{ width: '100%' }} />
@@ -1471,7 +1463,7 @@ const DataUmum: React.FC = () => {
               <Form.Item
                 rules={[
                   {
-                    required: true,
+                    required: !editMode,
                     message: 'Please input your data!',
                   },
                 ]}
@@ -1510,7 +1502,7 @@ const DataUmum: React.FC = () => {
               <Form.Item
                 rules={[
                   {
-                    required: true,
+                    required: !editMode,
                     message: 'Please input your data!',
                   },
                 ]}
@@ -1548,7 +1540,7 @@ const DataUmum: React.FC = () => {
               <Form.Item
                 rules={[
                   {
-                    required: true,
+                    required: !editMode,
                     message: 'Please input your data!',
                   },
                 ]}
@@ -1585,6 +1577,12 @@ const DataUmum: React.FC = () => {
             </Col>
             <Col span={12}>
               <Form.Item
+                rules={[
+                  {
+                    required: !editMode,
+                    message: 'Please input your data!',
+                  },
+                ]}
                 label="Upload"
                 valuePropName="fileList"
                 name="jml_karyawan_simulasi"

@@ -73,7 +73,7 @@ const App: React.FC = () => {
         onCollapse={(collapsed, type) => {
           console.log(collapsed, type);
         }}
-        style={{ backgroundColor: '#ffdd00', minHeight: 820 }}
+        style={{ backgroundColor: '#f74205', minHeight: 820 }}
         width={265}
       >
         <div className="demo-logo-vertical">
@@ -95,7 +95,7 @@ const App: React.FC = () => {
           onClick={onClick}
           selectedKeys={[current]}
           items={items}
-          style={{ backgroundColor: '#ededd1' }}
+          style={{ backgroundColor: '#edd1d1' }}
         />
       </Sider>
       <Layout>
