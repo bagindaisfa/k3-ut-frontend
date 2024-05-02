@@ -8,6 +8,9 @@ import {
   Spin,
   Tooltip,
   Typography,
+  Input,
+  Button,
+  message,
 } from 'antd';
 import type { TableProps, DatePickerProps } from 'antd';
 import { config } from '../config';
@@ -15,6 +18,7 @@ import { Column } from '@ant-design/plots';
 import dayjs from 'dayjs';
 
 const { Text } = Typography;
+const { TextArea } = Input;
 
 interface FieldSums {
   [key: string]: number;
@@ -25,6 +29,9 @@ interface DataItem {
 }
 
 const Dashboard: React.FC = () => {
+  const [messageApi, contextHolder] = message.useMessage();
+  const roleName = localStorage.getItem('rolename');
+  const isHO = roleName && roleName.endsWith('-HO');
   const [loadingPage, setLoadingPage] = React.useState<boolean>(false);
   const [defaultMonth, setDefaultMonth] = React.useState(dayjs().month() + 1); // Add 1 because dayjs().month() returns zero-based month index
   const [defaultYear, setDefaultYear] = React.useState(dayjs().year());
@@ -34,6 +41,8 @@ const Dashboard: React.FC = () => {
   const [site, setSite] = React.useState<string>('none');
   const [plant, setPlant] = React.useState<string>('none');
   const [bangunan, setBangunan] = React.useState<string>('all');
+  const [id, setId] = React.useState<string>('');
+  const [rekomendasi, setRekomendasi] = React.useState<string>('');
   const [optionsCabang, setOptionsCabang] = React.useState<any[]>([]);
   const [optionsSite, setOptionsSite] = React.useState<any[]>([]);
   const [optionsPlant, setOptionsPlant] = React.useState<any[]>([]);
@@ -281,6 +290,60 @@ const Dashboard: React.FC = () => {
     setMonth(new Date(dateString as string).getMonth() + 1);
   };
 
+  const onChange = (e: any) => {
+    setRekomendasi(e.target.value);
+  };
+
+  const success = (message: string) => {
+    messageApi.open({
+      type: 'success',
+      content: message,
+    });
+  };
+
+  const error = (message: string) => {
+    messageApi.open({
+      type: 'error',
+      content: message,
+    });
+  };
+
+  const saveRekomendasi = () => {
+    const token = localStorage.getItem('token');
+    fetch(`${config.apiUrl}/proteksi-kebakaran-rekomendasi/edit/${id}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'client-id': config.clientID,
+        'client-secret': config.clientSecret,
+      },
+      body: JSON.stringify({ rekomendasi: rekomendasi }),
+    })
+      .then(async (response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        if (response.status === 401) {
+          localStorage.removeItem('isLogin');
+          localStorage.removeItem('name');
+          localStorage.removeItem('rolename');
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+        }
+        const data = await response.json();
+        throw new Error(data.error);
+      })
+      .then((data) => {
+        success('Form data edited successfully');
+        fetchData(cabang, site, plant, bangunan, year, month);
+      })
+      .catch((err) => {
+        error(err.toString());
+        console.error('Error edit form data:', err);
+      });
+  };
+
   const handleChangeCabang = (value: any) => {
     setCabang(value);
     setSite('none');
@@ -369,6 +432,8 @@ const Dashboard: React.FC = () => {
         throw new Error('Network response was not ok.');
       })
       .then((data) => {
+        setId(data.data[0]?._id);
+        setRekomendasi(data.data[0]?.rekomendasi);
         setLuasArea(data.data[0]?.luas_tanah_keseluruhan);
         setJmlManPower(data.data[0]?.jumlah_karyawan);
         setStatusKepemilikanTanah(data.data[0]?.status_kepemilikan_area);
@@ -1576,437 +1641,529 @@ const Dashboard: React.FC = () => {
     height: 440,
   };
 
-  const defaultDate = dayjs(`${defaultYear}-${defaultMonth}-01`, 'YYYY-MM-DD');
-
-  return loadingPage ? (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center', // Horizontally center the Spin
-        alignItems: 'center', // Vertically center the Spin
-        minHeight: '100vh', // Ensure the container covers the entire viewport height
-      }}
-    >
-      <Spin size="large" />
-    </div>
-  ) : (
+  return (
     <>
-      <Tooltip title="Cabang">
-        <Select
-          value={cabang}
-          style={{ width: 150, margin: 16 }}
-          onChange={handleChangeCabang}
-          options={optionsCabang}
-        />
-      </Tooltip>
-      <Tooltip title="Site">
-        <Select
-          value={site}
-          style={{ width: 150, margin: 16 }}
-          onChange={handleChangeSite}
-          options={optionsSite}
-        />
-      </Tooltip>
-      <Tooltip title="Plant">
-        <Select
-          value={plant}
-          style={{ width: 150, margin: 16 }}
-          onChange={handleChangePlant}
-          options={optionsPlant}
-        />
-      </Tooltip>
-      <Tooltip title="Bangunan">
-        <Select
-          defaultValue={'all'}
-          style={{ width: 150, margin: 16 }}
-          onChange={handleChangeBangunan}
-          options={optionsBangunan}
-        />
-      </Tooltip>
-      <DatePicker
-        onChange={onChangeMonth}
-        picker="month"
-        style={{ margin: 16 }}
-        defaultValue={dayjs()}
-      />
-      <DatePicker
-        onChange={onChangeYear}
-        picker="year"
-        style={{ margin: 16 }}
-        defaultValue={dayjs()}
-      />
-      <Row gutter={24} style={{ margin: 10 }}>
-        <Col span={8}>
-          <p style={{ textAlign: 'left', fontWeight: 700 }}>
-            Nama BM/SM: {namaBMSM}
-          </p>
-        </Col>
-        <Col span={8}>
-          <p style={{ textAlign: 'left', fontWeight: 700 }}>
-            Nama ADH: {namaADH}
-          </p>
-        </Col>
-        <Col span={8}>
-          <p style={{ textAlign: 'left', fontWeight: 700 }}>
-            Nama ESR Officer/Leader: {namaESROfficerLeader}
-          </p>
-        </Col>
-      </Row>
-      <Row gutter={24} style={{ margin: 10 }}>
-        <Col span={8}>
-          <Card style={cardStyle}>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'max-content auto',
-                rowGap: '5px',
-              }}
-            >
-              <p style={{ textAlign: 'left', fontWeight: 700 }}>Luas Area</p>
+      {contextHolder}
+      {loadingPage ? (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center', // Horizontally center the Spin
+            alignItems: 'center', // Vertically center the Spin
+            minHeight: '100vh', // Ensure the container covers the entire viewport height
+          }}
+        >
+          <Spin size="large" />
+        </div>
+      ) : (
+        <>
+          <Tooltip title="Cabang">
+            <Select
+              value={cabang}
+              style={{ width: 150, margin: 16 }}
+              onChange={handleChangeCabang}
+              options={optionsCabang}
+            />
+          </Tooltip>
+          <Tooltip title="Site">
+            <Select
+              value={site}
+              style={{ width: 150, margin: 16 }}
+              onChange={handleChangeSite}
+              options={optionsSite}
+            />
+          </Tooltip>
+          <Tooltip title="Plant">
+            <Select
+              value={plant}
+              style={{ width: 150, margin: 16 }}
+              onChange={handleChangePlant}
+              options={optionsPlant}
+            />
+          </Tooltip>
+          <Tooltip title="Bangunan">
+            <Select
+              defaultValue={'all'}
+              style={{ width: 150, margin: 16 }}
+              onChange={handleChangeBangunan}
+              options={optionsBangunan}
+            />
+          </Tooltip>
+          <DatePicker
+            onChange={onChangeMonth}
+            picker="month"
+            style={{ margin: 16 }}
+            defaultValue={dayjs()}
+          />
+          <DatePicker
+            onChange={onChangeYear}
+            picker="year"
+            style={{ margin: 16 }}
+            defaultValue={dayjs()}
+          />
+          <Row gutter={24} style={{ margin: 10 }}>
+            <Col span={8}>
               <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                : {luasArea} M
-                <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
-                  ²
-                </Text>
+                Nama BM/SM: {namaBMSM}
               </p>
-
-              {bangunan === 'office' && (
-                <>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    Luas Office
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    : {luasAreaBangunan} M
-                    <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
-                      ²
-                    </Text>
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    Status kepemilikan
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    : {kepemilikanBangunan}
-                  </p>
-                </>
-              )}
-              {bangunan === 'workshop' && (
-                <>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    Luas Workshop
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    : {luasAreaBangunan} M
-                    <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
-                      ²
-                    </Text>
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    Status kepemilikan
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    : {kepemilikanBangunan}
-                  </p>
-                </>
-              )}
-
-              {bangunan === 'warehouse' && (
-                <>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    Luas Warehouse
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    : {luasAreaBangunan} M
-                    <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
-                      ²
-                    </Text>
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    Status kepemilikan
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    : {kepemilikanBangunan}
-                  </p>
-                </>
-              )}
-              {bangunan === 'mess' && (
-                <>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    Luas Mess
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    : {luasAreaBangunan} M
-                    <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
-                      ²
-                    </Text>
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    Status kepemilikan
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    : {kepemilikanBangunan}
-                  </p>
-                </>
-              )}
-              {bangunan === 'all' && (
-                <>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    Luas Office
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    : {luasOffice} M
-                    <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
-                      ²
-                    </Text>
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    Luas Workshop
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    : {luasWorkshop} M
-                    <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
-                      ²
-                    </Text>
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    Luas Warehouse
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    : {luasWarehouse} M
-                    <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
-                      ²
-                    </Text>
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    Luas Mess
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    : {luasMess} M
-                    <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
-                      ²
-                    </Text>
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    Status kepemilikan Tanah
-                  </p>
-                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                    : {statusKepemilikanTanah}
-                  </p>
-                </>
-              )}
-
+            </Col>
+            <Col span={8}>
               <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                Jumlah Man Power
+                Nama ADH: {namaADH}
               </p>
+            </Col>
+            <Col span={8}>
               <p style={{ textAlign: 'left', fontWeight: 700 }}>
-                : {jmlManPower}
+                Nama ESR Officer/Leader: {namaESROfficerLeader}
               </p>
-            </div>
-          </Card>
-        </Col>
-        <Col span={8}>
-          <Card style={cardStyle}>
-            <Column {...chartConfigApar} height={400} />
-          </Card>
-        </Col>
-        <Col span={8}>
-          <Card style={cardStyle}>
-            <Column {...chartConfigDetector} height={400} />
-          </Card>
-        </Col>
-      </Row>
-      <Row gutter={24} style={{ margin: 10 }}>
-        <Col span={6}>
-          <Card style={{ width: '100%', height: '100%' }}>
-            <h2>Pompa Jockey</h2>
-            <Card
-              title="Ketersediaan"
-              style={{ margin: 10, textAlign: 'center' }}
-            >
-              <b>{jockeyPumpTersedia}</b>
-            </Card>
-            <Card title="Kesiapan" style={{ margin: 10, textAlign: 'center' }}>
-              <b>{jockeyPumpKesiapan}</b>
-            </Card>
-            <Card title="Kecukupan" style={{ margin: 10, textAlign: 'center' }}>
-              <b>{jockeyPumpKecukupan}</b>
-            </Card>
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card style={{ width: '100%', height: '100%' }}>
-            <h2>Pompa Elektrik</h2>
-            <Card
-              title="Ketersediaan"
-              style={{ margin: 10, textAlign: 'center' }}
-            >
-              <b>{electricPumpTersedia}</b>
-            </Card>
-            <Card title="Kesiapan" style={{ margin: 10, textAlign: 'center' }}>
-              <b>{electricPumpKesiapan}</b>
-            </Card>
-            <Card title="Kecukupan" style={{ margin: 10, textAlign: 'center' }}>
-              <b>{electricPumpKecukupan}</b>
-            </Card>
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card style={{ width: '100%', height: '100%' }}>
-            <h2>Pompa Diesel</h2>
-            <Card
-              title="Ketersediaan"
-              style={{ margin: 5, textAlign: 'center' }}
-            >
-              <b>{dieselPumpTersedia}</b>
-            </Card>
-            <Card title="Kesiapan" style={{ margin: 5, textAlign: 'center' }}>
-              <b>{dieselPumpKesiapan}</b>
-            </Card>
-            <Card title="Kecukupan" style={{ margin: 5, textAlign: 'center' }}>
-              <b>{dieselPumpKecukupan}</b>
-            </Card>
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card style={{ width: '100%', height: '100%' }}>
-            <h2>Pompa Portable</h2>
-            <Card
-              title="Ketersediaan"
-              style={{ margin: 10, textAlign: 'center' }}
-            >
-              <b>{hydrantPortableTersedia}</b>
-            </Card>
-            <Card title="Kesiapan" style={{ margin: 10, textAlign: 'center' }}>
-              <b>{hydrantPortableKesiapan}</b>
-            </Card>
-            <Card title="Kecukupan" style={{ margin: 10, textAlign: 'center' }}>
-              <b>{hydrantPortableKecukupan}</b>
-            </Card>
-          </Card>
-        </Col>
-      </Row>
-      <Row gutter={24} style={{ margin: 10 }}>
-        <Col span={4}>
-          <Card style={cardStyle}>
-            <Column {...chartConfigBox} height={400} />
-          </Card>
-        </Col>
-        <Col span={4}>
-          <Card style={cardStyle}>
-            <Column {...chartConfigPilar} height={400} />
-          </Card>
-        </Col>
-        <Col span={4}>
-          <Card style={cardStyle}>
-            <Column {...chartConfigHoose15} height={400} />
-          </Card>
-        </Col>
-        <Col span={4}>
-          <Card style={cardStyle}>
-            <Column {...chartConfigHoose25} height={400} />
-          </Card>
-        </Col>
-        <Col span={4}>
-          <Card style={cardStyle}>
-            <Column {...chartConfigNozle15} height={400} />
-          </Card>
-        </Col>
-        <Col span={4}>
-          <Card style={cardStyle}>
-            <Column {...chartConfigNozle25} height={400} />
-          </Card>
-        </Col>
-      </Row>
-      <Row gutter={24} style={{ margin: 10 }}>
-        <Col span={6}>
-          <Card style={{ width: '100%', height: '100%' }}>
-            <h2>Petugas Peran Kebakaran</h2>
+            </Col>
+          </Row>
+          <Row gutter={24} style={{ margin: 10 }}>
+            <Col span={8}>
+              <Card style={cardStyle}>
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'max-content auto',
+                    rowGap: '5px',
+                  }}
+                >
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    Luas Area
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    : {luasArea} M
+                    <Text style={{ verticalAlign: 'super', fontSize: '0.9em' }}>
+                      ²
+                    </Text>
+                  </p>
 
-            <Card title="Kesiapan" style={{ margin: 10, textAlign: 'center' }}>
-              <b>{petugasPeranKesiapan}</b>
-            </Card>
-            <Card title="Kecukupan" style={{ margin: 10, textAlign: 'center' }}>
-              <b>{petugasPeranKecukupan}</b>
-            </Card>
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card style={{ width: '100%', height: '100%' }}>
-            <h2>Regu Penanggulangan</h2>
+                  {bangunan === 'office' && (
+                    <>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        Luas Office
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        : {luasAreaBangunan} M
+                        <Text
+                          style={{ verticalAlign: 'super', fontSize: '0.9em' }}
+                        >
+                          ²
+                        </Text>
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        Status kepemilikan
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        : {kepemilikanBangunan}
+                      </p>
+                    </>
+                  )}
+                  {bangunan === 'workshop' && (
+                    <>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        Luas Workshop
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        : {luasAreaBangunan} M
+                        <Text
+                          style={{ verticalAlign: 'super', fontSize: '0.9em' }}
+                        >
+                          ²
+                        </Text>
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        Status kepemilikan
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        : {kepemilikanBangunan}
+                      </p>
+                    </>
+                  )}
 
-            <Card title="Kesiapan" style={{ margin: 10, textAlign: 'center' }}>
-              <b>{reguPenanggulanganKesiapan}</b>
-            </Card>
-            <Card title="Kecukupan" style={{ margin: 10, textAlign: 'center' }}>
-              <b>{reguPenanggulanganKecukupan}</b>
-            </Card>
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card style={{ width: '100%', height: '100%' }}>
-            <h2>Koordinator Kebakaran</h2>
+                  {bangunan === 'warehouse' && (
+                    <>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        Luas Warehouse
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        : {luasAreaBangunan} M
+                        <Text
+                          style={{ verticalAlign: 'super', fontSize: '0.9em' }}
+                        >
+                          ²
+                        </Text>
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        Status kepemilikan
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        : {kepemilikanBangunan}
+                      </p>
+                    </>
+                  )}
+                  {bangunan === 'mess' && (
+                    <>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        Luas Mess
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        : {luasAreaBangunan} M
+                        <Text
+                          style={{ verticalAlign: 'super', fontSize: '0.9em' }}
+                        >
+                          ²
+                        </Text>
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        Status kepemilikan
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        : {kepemilikanBangunan}
+                      </p>
+                    </>
+                  )}
+                  {bangunan === 'all' && (
+                    <>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        Luas Office
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        : {luasOffice} M
+                        <Text
+                          style={{ verticalAlign: 'super', fontSize: '0.9em' }}
+                        >
+                          ²
+                        </Text>
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        Luas Workshop
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        : {luasWorkshop} M
+                        <Text
+                          style={{ verticalAlign: 'super', fontSize: '0.9em' }}
+                        >
+                          ²
+                        </Text>
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        Luas Warehouse
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        : {luasWarehouse} M
+                        <Text
+                          style={{ verticalAlign: 'super', fontSize: '0.9em' }}
+                        >
+                          ²
+                        </Text>
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        Luas Mess
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        : {luasMess} M
+                        <Text
+                          style={{ verticalAlign: 'super', fontSize: '0.9em' }}
+                        >
+                          ²
+                        </Text>
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        Status kepemilikan Tanah
+                      </p>
+                      <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                        : {statusKepemilikanTanah}
+                      </p>
+                    </>
+                  )}
 
-            <Card title="Kesiapan" style={{ margin: 5, textAlign: 'center' }}>
-              <b>{koordKebakaranKesiapan}</b>
-            </Card>
-            <Card title="Kecukupan" style={{ margin: 5, textAlign: 'center' }}>
-              <b>{koordKebakaranKecukupan}</b>
-            </Card>
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card style={{ width: '100%', height: '100%' }}>
-            <h2>Ahli K3 Kebakaran</h2>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    Jumlah Man Power
+                  </p>
+                  <p style={{ textAlign: 'left', fontWeight: 700 }}>
+                    : {jmlManPower}
+                  </p>
+                </div>
+              </Card>
+            </Col>
+            <Col span={8}>
+              <Card style={cardStyle}>
+                <Column {...chartConfigApar} height={400} />
+              </Card>
+            </Col>
+            <Col span={8}>
+              <Card style={cardStyle}>
+                <Column {...chartConfigDetector} height={400} />
+              </Card>
+            </Col>
+          </Row>
+          <Row gutter={24} style={{ margin: 10 }}>
+            <Col span={6}>
+              <Card style={{ width: '100%', height: '100%' }}>
+                <h2>Pompa Jockey</h2>
+                <Card
+                  title="Ketersediaan"
+                  style={{ margin: 10, textAlign: 'center' }}
+                >
+                  <b>{jockeyPumpTersedia}</b>
+                </Card>
+                <Card
+                  title="Kesiapan"
+                  style={{ margin: 10, textAlign: 'center' }}
+                >
+                  <b>{jockeyPumpKesiapan}</b>
+                </Card>
+                <Card
+                  title="Kecukupan"
+                  style={{ margin: 10, textAlign: 'center' }}
+                >
+                  <b>{jockeyPumpKecukupan}</b>
+                </Card>
+              </Card>
+            </Col>
+            <Col span={6}>
+              <Card style={{ width: '100%', height: '100%' }}>
+                <h2>Pompa Elektrik</h2>
+                <Card
+                  title="Ketersediaan"
+                  style={{ margin: 10, textAlign: 'center' }}
+                >
+                  <b>{electricPumpTersedia}</b>
+                </Card>
+                <Card
+                  title="Kesiapan"
+                  style={{ margin: 10, textAlign: 'center' }}
+                >
+                  <b>{electricPumpKesiapan}</b>
+                </Card>
+                <Card
+                  title="Kecukupan"
+                  style={{ margin: 10, textAlign: 'center' }}
+                >
+                  <b>{electricPumpKecukupan}</b>
+                </Card>
+              </Card>
+            </Col>
+            <Col span={6}>
+              <Card style={{ width: '100%', height: '100%' }}>
+                <h2>Pompa Diesel</h2>
+                <Card
+                  title="Ketersediaan"
+                  style={{ margin: 5, textAlign: 'center' }}
+                >
+                  <b>{dieselPumpTersedia}</b>
+                </Card>
+                <Card
+                  title="Kesiapan"
+                  style={{ margin: 5, textAlign: 'center' }}
+                >
+                  <b>{dieselPumpKesiapan}</b>
+                </Card>
+                <Card
+                  title="Kecukupan"
+                  style={{ margin: 5, textAlign: 'center' }}
+                >
+                  <b>{dieselPumpKecukupan}</b>
+                </Card>
+              </Card>
+            </Col>
+            <Col span={6}>
+              <Card style={{ width: '100%', height: '100%' }}>
+                <h2>Pompa Portable</h2>
+                <Card
+                  title="Ketersediaan"
+                  style={{ margin: 10, textAlign: 'center' }}
+                >
+                  <b>{hydrantPortableTersedia}</b>
+                </Card>
+                <Card
+                  title="Kesiapan"
+                  style={{ margin: 10, textAlign: 'center' }}
+                >
+                  <b>{hydrantPortableKesiapan}</b>
+                </Card>
+                <Card
+                  title="Kecukupan"
+                  style={{ margin: 10, textAlign: 'center' }}
+                >
+                  <b>{hydrantPortableKecukupan}</b>
+                </Card>
+              </Card>
+            </Col>
+          </Row>
+          <Row gutter={24} style={{ margin: 10 }}>
+            <Col span={4}>
+              <Card style={cardStyle}>
+                <Column {...chartConfigBox} height={400} />
+              </Card>
+            </Col>
+            <Col span={4}>
+              <Card style={cardStyle}>
+                <Column {...chartConfigPilar} height={400} />
+              </Card>
+            </Col>
+            <Col span={4}>
+              <Card style={cardStyle}>
+                <Column {...chartConfigHoose15} height={400} />
+              </Card>
+            </Col>
+            <Col span={4}>
+              <Card style={cardStyle}>
+                <Column {...chartConfigHoose25} height={400} />
+              </Card>
+            </Col>
+            <Col span={4}>
+              <Card style={cardStyle}>
+                <Column {...chartConfigNozle15} height={400} />
+              </Card>
+            </Col>
+            <Col span={4}>
+              <Card style={cardStyle}>
+                <Column {...chartConfigNozle25} height={400} />
+              </Card>
+            </Col>
+          </Row>
+          <Row gutter={24} style={{ margin: 10 }}>
+            <Col span={6}>
+              <Card style={{ width: '100%', height: '100%' }}>
+                <h2>Petugas Peran Kebakaran</h2>
 
-            <Card title="Kesiapan" style={{ margin: 10, textAlign: 'center' }}>
-              <b>{ahliK3KebakaranKesiapan}</b>
-            </Card>
-            <Card title="Kecukupan" style={{ margin: 10, textAlign: 'center' }}>
-              <b>{ahliK3KebakaranKecukupan}</b>
-            </Card>
-          </Card>
-        </Col>
-      </Row>
-      <Row gutter={24} style={{ margin: 10 }}>
-        <Col span={24}>
-          <Card
-            style={{
-              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', // Adjust shadow properties as needed
-              borderRadius: '8px', // Optional: Add border radius for rounded corners
-              width: '100%',
-              height: '100%',
-            }}
-          >
-            <p>
-              <b>Keterangan:</b>
-              <br />
-              1. Tingkat D : Petugas peran penanggulangan kebakaran ialah
-              petugas yang ditunjuk dan diserahi tugas tambahan untuk
-              mengidentifikasi sumber-sumber bahaya dan melaksanakan upaya-upaya
-              penanggulangan kebakaran.
-              <br />
-              2. Tingkat C : Regu penanggulangan kebakaran ialah Satuan tugas
-              yang mempunyai tugas khusus fungsional di bidang penanggulangan
-              kebakaran.
-              <br />
-              3. Tingkat B : Koordinator unit penanggulangan kebakaran bertugas
-              memimpin penanggulangan kebakaran sebelum mendapat bantuan dari
-              instansi yang berwenang
-              <br />
-              4. Tingkat A : Ahli Keselamatan Kerja ialah tenaga teknis yang
-              berkeahlian khusus di bidang penanggulangan kebakaran dari luar
-              Departemen Tenaga Kerja yang ditunjuk oleh Menteri Tenaga Kerja.
-              <br />
-              <br />
-              <b>
-                Unit penanggulangan kebakaran yang terdaftar adalah personal
-                yang telah memiliki sertifikasi kompetensi Tingkat A;B;C;D
-                sesuai Keputusan Menteri Tenaga Kerja R.I No.Kep.186/Men/1999
-                Tentang Unit Penanggulangan Kebakaran Ditempat Kerja
-              </b>
-            </p>
-          </Card>
-        </Col>
-      </Row>
+                <Card
+                  title="Kesiapan"
+                  style={{ margin: 10, textAlign: 'center' }}
+                >
+                  <b>{petugasPeranKesiapan}</b>
+                </Card>
+                <Card
+                  title="Kecukupan"
+                  style={{ margin: 10, textAlign: 'center' }}
+                >
+                  <b>{petugasPeranKecukupan}</b>
+                </Card>
+              </Card>
+            </Col>
+            <Col span={6}>
+              <Card style={{ width: '100%', height: '100%' }}>
+                <h2>Regu Penanggulangan</h2>
+
+                <Card
+                  title="Kesiapan"
+                  style={{ margin: 10, textAlign: 'center' }}
+                >
+                  <b>{reguPenanggulanganKesiapan}</b>
+                </Card>
+                <Card
+                  title="Kecukupan"
+                  style={{ margin: 10, textAlign: 'center' }}
+                >
+                  <b>{reguPenanggulanganKecukupan}</b>
+                </Card>
+              </Card>
+            </Col>
+            <Col span={6}>
+              <Card style={{ width: '100%', height: '100%' }}>
+                <h2>Koordinator Kebakaran</h2>
+
+                <Card
+                  title="Kesiapan"
+                  style={{ margin: 5, textAlign: 'center' }}
+                >
+                  <b>{koordKebakaranKesiapan}</b>
+                </Card>
+                <Card
+                  title="Kecukupan"
+                  style={{ margin: 5, textAlign: 'center' }}
+                >
+                  <b>{koordKebakaranKecukupan}</b>
+                </Card>
+              </Card>
+            </Col>
+            <Col span={6}>
+              <Card style={{ width: '100%', height: '100%' }}>
+                <h2>Ahli K3 Kebakaran</h2>
+
+                <Card
+                  title="Kesiapan"
+                  style={{ margin: 10, textAlign: 'center' }}
+                >
+                  <b>{ahliK3KebakaranKesiapan}</b>
+                </Card>
+                <Card
+                  title="Kecukupan"
+                  style={{ margin: 10, textAlign: 'center' }}
+                >
+                  <b>{ahliK3KebakaranKecukupan}</b>
+                </Card>
+              </Card>
+            </Col>
+          </Row>
+          <Row gutter={24} style={{ margin: 10 }}>
+            <Col span={17}>
+              <Card
+                style={{
+                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', // Adjust shadow properties as needed
+                  borderRadius: '8px', // Optional: Add border radius for rounded corners
+                  width: '100%',
+                  height: '100%',
+                }}
+              >
+                <p>
+                  <b>Keterangan:</b>
+                  <br />
+                  1. Tingkat D : Petugas peran penanggulangan kebakaran ialah
+                  petugas yang ditunjuk dan diserahi tugas tambahan untuk
+                  mengidentifikasi sumber-sumber bahaya dan melaksanakan
+                  upaya-upaya penanggulangan kebakaran.
+                  <br />
+                  2. Tingkat C : Regu penanggulangan kebakaran ialah Satuan
+                  tugas yang mempunyai tugas khusus fungsional di bidang
+                  penanggulangan kebakaran.
+                  <br />
+                  3. Tingkat B : Koordinator unit penanggulangan kebakaran
+                  bertugas memimpin penanggulangan kebakaran sebelum mendapat
+                  bantuan dari instansi yang berwenang
+                  <br />
+                  4. Tingkat A : Ahli Keselamatan Kerja ialah tenaga teknis yang
+                  berkeahlian khusus di bidang penanggulangan kebakaran dari
+                  luar Departemen Tenaga Kerja yang ditunjuk oleh Menteri Tenaga
+                  Kerja.
+                  <br />
+                  <br />
+                  <b>
+                    Unit penanggulangan kebakaran yang terdaftar adalah personal
+                    yang telah memiliki sertifikasi kompetensi Tingkat A;B;C;D
+                    sesuai Keputusan Menteri Tenaga Kerja R.I
+                    No.Kep.186/Men/1999 Tentang Unit Penanggulangan Kebakaran
+                    Ditempat Kerja
+                  </b>
+                </p>
+              </Card>
+            </Col>
+            <Col span={7}>
+              <Card
+                style={{
+                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', // Adjust shadow properties as needed
+                  borderRadius: '8px', // Optional: Add border radius for rounded corners
+                  width: '100%',
+                  height: '100%',
+                }}
+              >
+                <h2>Rekomendasi</h2>
+                <TextArea rows={6} onChange={onChange} value={rekomendasi} />
+                <Button
+                  type="primary"
+                  style={{ marginTop: 20 }}
+                  onClick={saveRekomendasi}
+                  disabled={roleName !== 'ADMIN' && !isHO}
+                >
+                  Save
+                </Button>
+              </Card>
+            </Col>
+          </Row>
+        </>
+      )}
     </>
   );
 };
